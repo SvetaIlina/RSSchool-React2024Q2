@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Props, Result } from '../../types/type';
 import ResultsSection from '../resultSection/resultSection';
 import SearchSection from '../searchSection/searchSection';
+import './app.css';
 
 interface AppState {
     searchTerm: string;

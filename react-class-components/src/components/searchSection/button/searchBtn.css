@@ -1,0 +1,13 @@
+.search-btn {
+    border: var(--border);
+    height: 100%;
+    border-radius: 10px;
+    padding: 8px 16px;
+    font-weight: bold;
+    color: var(--accent);
+    transition: all 0.3s;
+}
+
+.search-btn:hover {
+    color: var(--text);
+}

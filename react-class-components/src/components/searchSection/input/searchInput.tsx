@@ -22,6 +22,7 @@ export default class SearchInput extends Component<SearchInputProps> {
                 value={this.props.value}
                 onChange={this.handleInputChange}
                 placeholder="Search..."
+                spellCheck={false}
             />
         );
     }

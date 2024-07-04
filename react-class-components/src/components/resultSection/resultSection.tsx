@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Result } from '../../types/type';
+import './resultSection.css';
 
 interface ResultsSectionProps {
     searchResults: Result[];
@@ -10,7 +11,7 @@ class ResultsSection extends Component<ResultsSectionProps> {
         const { searchResults } = this.props;
 
         return (
-            <div className="bottom-section">
+            <div className="result-section">
                 {searchResults.length > 0 ? (
                     searchResults.map((result, index) => (
                         <div key={index} className="result-item">
