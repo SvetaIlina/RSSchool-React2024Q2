@@ -1,0 +1,8 @@
+.error-btn {
+    position: absolute;
+    top: 0;
+    padding: 4px 8px;
+    font-size: 1.2rem;
+    background: var(--accent);
+    color: #bab2b5;
+}

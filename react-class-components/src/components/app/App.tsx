@@ -3,10 +3,12 @@ import { Props, Result } from '../../types/type';
 import ResultsSection from '../resultSection/resultSection';
 import SearchSection from '../searchSection/searchSection';
 import './app.css';
+import ErrorImitationBtn from '../errorBoundary/errorImitationButton/errorImitationButton';
 
 interface AppState {
     searchTerm: string;
     searchResult: Result[];
+    errorCounter: number;
 }
 
 export default class App extends Component<Props, AppState> {
@@ -15,9 +17,11 @@ export default class App extends Component<Props, AppState> {
         this.state = {
             searchTerm: '',
             searchResult: [],
+            errorCounter: 0,
         };
         this.handleSearchTermChange = this.handleSearchTermChange.bind(this);
         this.handleSearchBtnClick = this.handleSearchBtnClick.bind(this);
+        this.simulateError = this.simulateError.bind(this);
     }
 
     componentDidMount() {
@@ -47,9 +51,17 @@ export default class App extends Component<Props, AppState> {
         this.setState({ searchResult: filteredResults });
     }
 
+    simulateError() {
+        this.setState({
+            errorCounter: this.state.errorCounter + 1,
+        });
+    }
+
     render() {
         const { searchTerm, searchResult } = this.state;
-
+        if (this.state.errorCounter > 0) {
+            throw new Error('I crashed!');
+        }
         return (
             <div className="app">
                 <SearchSection
@@ -58,6 +70,7 @@ export default class App extends Component<Props, AppState> {
                     onSearch={this.handleSearchBtnClick}
                 />
                 <ResultsSection searchResults={searchResult} />
+                <ErrorImitationBtn onclick={this.simulateError} />
             </div>
         );
     }
