@@ -1,0 +1,18 @@
+.result-item {
+    width: 100%;
+    min-height: 100px;
+    border: var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+}
+
+.item-title {
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    color: var(--accent);
+}
+
+.item-description {
+    font-size: 1.8rem;
+}

@@ -1,0 +1,14 @@
+.result-section {
+    position: relative;
+    flex-grow: 1;
+    border-top: 1px solid var(--accent);
+    padding-top: 3rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 16px;
+}
+
+.no-result {
+    font-size: 4rem;
+    color: #bab2b5;
+}
