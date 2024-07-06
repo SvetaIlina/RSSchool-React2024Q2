@@ -32,6 +32,7 @@ module.exports = {
     },
     plugins: ['@typescript-eslint', 'react', 'react-compiler', 'prettier'],
     rules: {
+        'react/react-in-jsx-scope': 'off',
         '@typescript-eslint/no-explicit-any': 2,
         'react-compiler/react-compiler': 'error',
     },

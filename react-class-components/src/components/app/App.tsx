@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Props, SwapiPerson } from '../../types/type';
 import ResultsSection from '../resultSection/resultSection';
 import SearchSection from '../searchSection/searchSection';

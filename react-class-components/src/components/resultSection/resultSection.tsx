@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { SwapiPerson } from '../../types/type';
 import './resultSection.css';
 import Card from './card/card';

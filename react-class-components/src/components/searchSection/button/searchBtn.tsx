@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import './searchBtn.css';
 
 export default class SearchButton extends Component {
