@@ -10,6 +10,7 @@ interface AppState {
     searchTerm: string;
     searchResult: SwapiPerson[];
     errorCounter: number;
+    isLoading: boolean;
 }
 
 export default class App extends Component<Props, AppState> {
@@ -19,6 +20,7 @@ export default class App extends Component<Props, AppState> {
             searchTerm: '',
             searchResult: [],
             errorCounter: 0,
+            isLoading: false,
         };
         this.handleSearchTermChange = this.handleSearchTermChange.bind(this);
         this.handleSearchBtnClick = this.handleSearchBtnClick.bind(this);
@@ -35,11 +37,14 @@ export default class App extends Component<Props, AppState> {
     }
 
     async getResults() {
+        this.setState({ isLoading: true });
         try {
             const result = await fetchData(this.state.searchTerm);
             this.setState({ searchResult: result });
         } catch (error) {
             console.error(error);
+        } finally {
+            this.setState({ isLoading: false });
         }
     }
 
@@ -60,7 +65,7 @@ export default class App extends Component<Props, AppState> {
     }
 
     render() {
-        const { searchTerm, searchResult } = this.state;
+        const { searchTerm, searchResult, isLoading } = this.state;
         if (this.state.errorCounter > 0) {
             throw new Error('I crashed!');
         }
@@ -71,7 +76,7 @@ export default class App extends Component<Props, AppState> {
                     onSearchTermChange={this.handleSearchTermChange}
                     onSearch={this.handleSearchBtnClick}
                 />
-                <ResultsSection searchResults={searchResult} />
+                <ResultsSection searchResults={searchResult} isReady={!isLoading} />
                 <ErrorImitationBtn onclick={this.simulateError} />
             </div>
         );
