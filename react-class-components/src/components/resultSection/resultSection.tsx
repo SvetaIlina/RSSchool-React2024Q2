@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Result } from '../../types/type';
+import { SwapiPerson } from '../../types/type';
 import './resultSection.css';
 import Card from './card/card';
 
 interface ResultsSectionProps {
-    searchResults: Result[];
+    searchResults: SwapiPerson[];
 }
 
 class ResultsSection extends Component<ResultsSectionProps> {
@@ -14,9 +14,7 @@ class ResultsSection extends Component<ResultsSectionProps> {
         return (
             <div className="result-section">
                 {searchResults.length > 0 ? (
-                    searchResults.map((result, index) => (
-                        <Card key={index} name={result.name} description={result.description} />
-                    ))
+                    searchResults.map((result, index) => <Card key={index} character={result} />)
                 ) : (
                     <p className="no-result">No results found</p>
                 )}

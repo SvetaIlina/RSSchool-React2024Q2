@@ -21,7 +21,7 @@ export default class SearchInput extends Component<SearchInputProps> {
                 type="text"
                 value={this.props.value}
                 onChange={this.handleInputChange}
-                placeholder="Search..."
+                placeholder="Search for a Star Wars character..."
                 spellCheck={false}
             />
         );
