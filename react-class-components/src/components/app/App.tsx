@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { Props, Result } from '../../types/type';
+import { Props, SwapiPerson } from '../../types/type';
 import ResultsSection from '../resultSection/resultSection';
 import SearchSection from '../searchSection/searchSection';
 import './app.css';
 import ErrorImitationBtn from '../errorBoundary/errorImitationButton/errorImitationButton';
+import fetchData from '../../utils/swapi';
 
 interface AppState {
     searchTerm: string;
-    searchResult: Result[];
+    searchResult: SwapiPerson[];
     errorCounter: number;
 }
 
@@ -24,10 +25,21 @@ export default class App extends Component<Props, AppState> {
         this.simulateError = this.simulateError.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         const savedSearchTerm = localStorage.getItem('searchTerm');
         if (savedSearchTerm) {
-            this.setState({ searchTerm: savedSearchTerm });
+            this.setState({ searchTerm: savedSearchTerm }, this.getResults);
+        } else {
+            await this.getResults();
+        }
+    }
+
+    async getResults() {
+        try {
+            const result = await fetchData(this.state.searchTerm);
+            this.setState({ searchResult: result });
+        } catch (error) {
+            console.error(error);
         }
     }
 
@@ -35,20 +47,10 @@ export default class App extends Component<Props, AppState> {
         this.setState({ searchTerm });
     }
 
-    handleSearchBtnClick() {
+    async handleSearchBtnClick() {
         const { searchTerm } = this.state;
         localStorage.setItem('searchTerm', searchTerm);
-
-        const results = [
-            { name: 'Result 1', description: 'Description of result 1' },
-            { name: 'Result 2', description: 'Description of result 2' },
-        ];
-
-        const filteredResults = results.filter((result) =>
-            result.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-
-        this.setState({ searchResult: filteredResults });
+        await this.getResults();
     }
 
     simulateError() {
