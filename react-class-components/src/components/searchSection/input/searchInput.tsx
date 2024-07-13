@@ -1,29 +1,23 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent } from 'react';
 import './searchInput.css';
 
 interface SearchInputProps {
     value: string;
     onChange: (value: string) => void;
 }
-export default class SearchInput extends Component<SearchInputProps> {
-    constructor(props: SearchInputProps) {
-        super(props);
-        this.handleInputChange = this.handleInputChange.bind(this);
-    }
+export default function SearchInput({ value, onChange }: SearchInputProps) {
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        onChange(event.target.value);
+    };
 
-    handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-        this.props.onChange(event.target.value);
-    }
-    render(): React.ReactNode {
-        return (
-            <input
-                className="search-input"
-                type="text"
-                value={this.props.value}
-                onChange={this.handleInputChange}
-                placeholder="Search for a Star Wars character..."
-                spellCheck={false}
-            />
-        );
-    }
+    return (
+        <input
+            className="search-input"
+            type="text"
+            value={value}
+            onChange={handleInputChange}
+            placeholder="Search for a Star Wars character..."
+            spellCheck={false}
+        />
+    );
 }
