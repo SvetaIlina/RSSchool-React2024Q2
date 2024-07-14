@@ -1,84 +1,73 @@
-import { Component } from 'react';
-import { Props, SwapiPerson } from '../../types/type';
+import { useEffect, useState } from 'react';
+import { SwapiPerson } from '../../types/type';
 import ResultsSection from '../resultSection/resultSection';
 import SearchSection from '../searchSection/searchSection';
 import './app.css';
 import ErrorImitationBtn from '../errorBoundary/errorImitationButton/errorImitationButton';
 import fetchData from '../../utils/swapi';
+import useSavedQuery from '../../hooks/useSavedQuery';
 
-interface AppState {
-    searchTerm: string;
-    searchResult: SwapiPerson[];
-    errorCounter: number;
-    isLoading: boolean;
-}
+export default function App() {
+    const [savedQuery, setSavedQuery] = useSavedQuery('searchTerm');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResult, setSearchResult] = useState<SwapiPerson[]>([]);
+    const [errorCounter, setErrorCounter] = useState(0);
+    const [isLoading, setIsLoading] = useState(false);
 
-export default class App extends Component<Props, AppState> {
-    constructor(props: Props) {
-        super(props);
-        this.state = {
-            searchTerm: '',
-            searchResult: [],
-            errorCounter: 0,
-            isLoading: false,
-        };
-        this.handleSearchTermChange = this.handleSearchTermChange.bind(this);
-        this.handleSearchBtnClick = this.handleSearchBtnClick.bind(this);
-        this.simulateError = this.simulateError.bind(this);
-    }
-
-    async componentDidMount() {
-        const savedSearchTerm = localStorage.getItem('searchTerm');
-        if (savedSearchTerm) {
-            this.setState({ searchTerm: savedSearchTerm }, this.getResults);
-        } else {
-            await this.getResults();
+    useEffect(() => {
+        async function displayResult() {
+            let term: string = searchTerm;
+            if (savedQuery) {
+                setSearchTerm(savedQuery);
+                term = savedQuery;
+            }
+            await getResults(term);
         }
-    }
 
-    async getResults() {
-        this.setState({ isLoading: true });
+        displayResult();
+    }, []);
+
+    useEffect(() => {
+        if (errorCounter > 1) {
+            throw new Error('I crashed!');
+        }
+    }, [errorCounter]);
+
+    const getResults = async (term: string) => {
+        setIsLoading(true);
+
         try {
-            const result = await fetchData(this.state.searchTerm);
-            this.setState({ searchResult: result });
+            const result = await fetchData(term);
+            setSearchResult(result);
         } catch (error) {
             console.error(error);
         } finally {
-            this.setState({ isLoading: false });
+            setIsLoading(false);
         }
-    }
+    };
 
-    handleSearchTermChange(searchTerm: string) {
-        this.setState({ searchTerm });
-    }
+    const handleSearchTermChange = (searchTerm: string) => {
+        setSearchTerm(searchTerm);
+    };
 
-    async handleSearchBtnClick() {
-        const { searchTerm } = this.state;
-        localStorage.setItem('searchTerm', searchTerm);
-        await this.getResults();
-    }
+    const handleSearchBtnClick = async () => {
+        setSavedQuery(searchTerm);
+        await getResults(searchTerm);
+    };
 
-    simulateError() {
-        this.setState({
-            errorCounter: this.state.errorCounter + 1,
-        });
-    }
+    const simulateError = () => {
+        setErrorCounter((prev) => prev + 1);
+    };
 
-    render() {
-        const { searchTerm, searchResult, isLoading } = this.state;
-        if (this.state.errorCounter > 0) {
-            throw new Error('I crashed!');
-        }
-        return (
-            <div className="app">
-                <SearchSection
-                    searchTerm={searchTerm}
-                    onSearchTermChange={this.handleSearchTermChange}
-                    onSearch={this.handleSearchBtnClick}
-                />
-                <ResultsSection searchResults={searchResult} isReady={!isLoading} />
-                <ErrorImitationBtn onclick={this.simulateError} />
-            </div>
-        );
-    }
+    return (
+        <div className="app">
+            <SearchSection
+                searchTerm={searchTerm}
+                onSearchTermChange={handleSearchTermChange}
+                onSearch={handleSearchBtnClick}
+            />
+            <ResultsSection searchResults={searchResult} isReady={!isLoading} />
+            <ErrorImitationBtn onclick={simulateError} />
+        </div>
+    );
 }
