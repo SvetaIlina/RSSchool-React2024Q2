@@ -10,7 +10,7 @@ interface ResultsSectionProps {
 
 export default function ResultsSection({ searchResults, isReady }: ResultsSectionProps) {
     return (
-        <div className="result-section">
+        <div className="left-section">
             {isReady ? (
                 searchResults.length > 0 ? (
                     searchResults.map((result, index) => <Card key={index} character={result} />)

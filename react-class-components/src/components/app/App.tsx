@@ -1,23 +1,16 @@
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import './app.css';
 import MainPage from '../../pages/main/mainPage';
-import React from 'react';
 import NotFoundPage from '../../pages/notFound/notFoundPage';
-const router = createBrowserRouter([
-    {
-        path: '/',
-        element: <MainPage />,
-    },
-    {
-        path: '*',
-        element: <NotFoundPage />,
-    },
-]);
+import DetailPage from '../../pages/detailPage/detailPage';
 
 export default function App() {
     return (
-        <React.StrictMode>
-            <RouterProvider router={router} />
-        </React.StrictMode>
+        <Routes>
+            <Route path="/" element={<MainPage />}>
+                <Route path="/details/:name" element={<DetailPage />} />
+            </Route>
+            <Route path="*" element={<NotFoundPage />} />
+        </Routes>
     );
 }

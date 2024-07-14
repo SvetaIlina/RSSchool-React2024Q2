@@ -3,29 +3,17 @@ import ErrorImitationBtn from '../../components/errorBoundary/errorImitationButt
 import ResultsSection from '../../components/resultSection/resultSection';
 import SearchSection from '../../components/searchSection/searchSection';
 import useSavedQuery from '../../hooks/useSavedQuery';
-import { SwapiPerson } from '../../types/type';
-import fetchData from '../../utils/swapi';
 import '../pages.css';
+import { Outlet, useLocation } from 'react-router-dom';
+import useFetchData from '../../hooks/useFetchData';
 
 export default function MainPage() {
     const [savedQuery, setSavedQuery] = useSavedQuery('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
-    const [searchResult, setSearchResult] = useState<SwapiPerson[]>([]);
     const [errorCounter, setErrorCounter] = useState(0);
-    const [isLoading, setIsLoading] = useState(false);
-
-    useEffect(() => {
-        async function displayResult() {
-            let term: string = searchTerm;
-            if (savedQuery) {
-                setSearchTerm(savedQuery);
-                term = savedQuery;
-            }
-            await getResults(term);
-        }
-
-        displayResult();
-    }, []);
+    const initialSearchTerm = savedQuery || '';
+    const { data: searchResult, isLoading } = useFetchData(initialSearchTerm);
+    const location = useLocation();
 
     useEffect(() => {
         if (errorCounter > 1) {
@@ -33,26 +21,12 @@ export default function MainPage() {
         }
     }, [errorCounter]);
 
-    const getResults = async (term: string) => {
-        setIsLoading(true);
-
-        try {
-            const result = await fetchData(term);
-            setSearchResult(result);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
     const handleSearchTermChange = (searchTerm: string) => {
         setSearchTerm(searchTerm);
     };
 
     const handleSearchBtnClick = async () => {
         setSavedQuery(searchTerm);
-        await getResults(searchTerm);
     };
 
     const simulateError = () => {
@@ -66,7 +40,14 @@ export default function MainPage() {
                 onSearchTermChange={handleSearchTermChange}
                 onSearch={handleSearchBtnClick}
             />
-            <ResultsSection searchResults={searchResult} isReady={!isLoading} />
+            <div className="result-section">
+                <ResultsSection searchResults={searchResult} isReady={!isLoading} />
+                {location.pathname.startsWith('/details') && (
+                    <div className="right-section">
+                        <Outlet />
+                    </div>
+                )}
+            </div>
             <ErrorImitationBtn onclick={simulateError} />
         </div>
     );
