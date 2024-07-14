@@ -4,16 +4,38 @@ import ResultsSection from '../../components/resultSection/resultSection';
 import SearchSection from '../../components/searchSection/searchSection';
 import useSavedQuery from '../../hooks/useSavedQuery';
 import '../pages.css';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import useFetchData from '../../hooks/useFetchData';
+import Pagination from '../../components/pagination/pagination';
 
 export default function MainPage() {
     const [savedQuery, setSavedQuery] = useSavedQuery('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
     const [errorCounter, setErrorCounter] = useState(0);
     const initialSearchTerm = savedQuery || '';
-    const { data: searchResult, isLoading } = useFetchData(initialSearchTerm);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const [currentPage, setCurrentPage] = useState(1);
+    const { data: searchResult, isLoading, totalPages } = useFetchData(initialSearchTerm, currentPage);
     const location = useLocation();
+
+    useEffect(() => {
+        let newCurrentPage = currentPage;
+
+        if (searchParams.has('page')) {
+            newCurrentPage = parseInt(searchParams.get('page') || '1');
+        }
+
+        if (newCurrentPage !== currentPage) {
+            setCurrentPage(newCurrentPage);
+        }
+    }, [searchParams, currentPage]);
+
+    useEffect(() => {
+        if (savedQuery) {
+            setSearchTerm(savedQuery);
+        }
+        setSearchParams({ page: '1' });
+    }, []);
 
     useEffect(() => {
         if (errorCounter > 1) {
@@ -27,10 +49,15 @@ export default function MainPage() {
 
     const handleSearchBtnClick = async () => {
         setSavedQuery(searchTerm);
+        setSearchParams({ page: '1' });
     };
 
     const simulateError = () => {
         setErrorCounter((prev) => prev + 1);
+    };
+
+    const handlePageChange = (page: number) => {
+        setSearchParams({ page: page.toString() });
     };
 
     return (
@@ -48,6 +75,9 @@ export default function MainPage() {
                     </div>
                 )}
             </div>
+            {searchResult.length > 0 && (
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            )}
             <ErrorImitationBtn onclick={simulateError} />
         </div>
     );

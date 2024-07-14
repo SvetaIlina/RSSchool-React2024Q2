@@ -10,7 +10,7 @@ export default function Card({ character }: CardProps) {
     const navigate = useNavigate();
     const handleShowDetails = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, name: string) => {
         e.stopPropagation();
-        navigate(`/details/${name}`, { replace: true });
+        navigate(`details/${name}`, { replace: true });
     };
     return (
         <div className="result-item" onClick={(e) => handleShowDetails(e, character.name)}>
