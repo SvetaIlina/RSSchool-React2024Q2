@@ -71,7 +71,7 @@ export default function MainPage() {
                 <ResultsSection searchResults={searchResult} isReady={!isLoading} />
                 {location.pathname.startsWith('/details') && (
                     <div className="right-section">
-                        <Outlet />
+                        <Outlet context={currentPage} />
                     </div>
                 )}
             </div>
