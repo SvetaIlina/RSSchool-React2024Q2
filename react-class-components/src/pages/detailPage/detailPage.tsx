@@ -14,7 +14,7 @@ export default function DetailPage() {
     const location = useLocation();
     const newURL = `${location.search}${location.hash}`;
 
-    useEffect(() => setSearchParams({ page: `${page}` }), []);
+    useEffect(() => setSearchParams({ page: `${page}` }), [page, name]);
 
     return (
         <div className="details">

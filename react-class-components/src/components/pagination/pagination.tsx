@@ -21,13 +21,13 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
 
     return (
         <div className="pagination">
-            <button onClick={handlePrevious} disabled={currentPage === 1}>
+            <button onClick={handlePrevious} disabled={currentPage === 1} className="pagination-btn">
                 Previous
             </button>
             <span>
                 Page {currentPage} of {totalPages}
             </span>
-            <button onClick={handleNext} disabled={currentPage === totalPages}>
+            <button onClick={handleNext} disabled={currentPage === totalPages} className="pagination-btn">
                 Next
             </button>
         </div>
