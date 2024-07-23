@@ -31,6 +31,7 @@ export const selectedItemSlice = createSlice({
 });
 
 export const getSelectedItemsDetails = (state: RootState) => state.selectedItem.details;
+export const getNumberOfSelectedItems = (state: RootState) => state.selectedItem.details.length;
 
 export const { toggleItemSelection, clearSelectedItems } = selectedItemSlice.actions;
 export default selectedItemSlice.reducer;
