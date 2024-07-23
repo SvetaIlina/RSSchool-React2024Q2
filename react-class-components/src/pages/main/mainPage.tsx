@@ -16,7 +16,7 @@ export default function MainPage() {
     const [errorCounter, setErrorCounter] = useState(0);
     const [, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
-    const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm });
+    const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm: savedQuery });
     const totalPages = searchResult?.itemsCount ? Math.ceil(searchResult.itemsCount / Page.TOTAL) : 0;
     const location = useLocation();
 
