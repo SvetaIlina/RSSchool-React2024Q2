@@ -1,17 +1,18 @@
 import { useSelector } from 'react-redux';
-import { clearSelectedItems, getNumberOfSelectedItems } from '../../utils/selectedItemlSlice';
+import { clearSelectedItems, getNumberOfSelectedItems, getSelectedItemsDetails } from '../../utils/selectedItemlSlice';
 import './flyout.css';
 import { useDispatch } from 'react-redux';
+import DownloadLink from './downloadLink/downLoadLink';
 
 export default function Flyout() {
     const dispatch = useDispatch();
+    const selectedItems = useSelector(getSelectedItemsDetails);
     const numberOfItems = useSelector(getNumberOfSelectedItems);
     if (!numberOfItems) {
         return null;
     }
 
     const handleClearAll = () => dispatch(clearSelectedItems());
-    const handleDownload = () => console.log(123);
 
     return (
         <div className="flyout">
@@ -22,8 +23,8 @@ export default function Flyout() {
                 <button onClick={handleClearAll} className="flyout-btn  flyout-btn__unselect">
                     Unselect all
                 </button>
-                <button onClick={handleDownload} className="flyout-btn flyout-btn__download">
-                    Download
+                <button className="flyout-btn flyout-btn__download">
+                    <DownloadLink items={selectedItems} />
                 </button>
             </div>
         </div>
