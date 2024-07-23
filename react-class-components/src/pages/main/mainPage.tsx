@@ -7,6 +7,7 @@ import '../pages.css';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import Pagination from '../../components/pagination/pagination';
 import { useGetCharactersQuery } from '../../utils/apiSlice';
+import { Page } from '../../types/enums';
 
 export default function MainPage() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
@@ -15,8 +16,7 @@ export default function MainPage() {
     const [, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
     const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm });
-    const itemPerPage = 10;
-    const totalPages = searchResult?.pageCount ? Math.ceil(searchResult.pageCount / itemPerPage) : 0;
+    const totalPages = searchResult?.pageCount ? Math.ceil(searchResult.pageCount / Page.TOTAL) : 0;
     const location = useLocation();
 
     useEffect(() => {
