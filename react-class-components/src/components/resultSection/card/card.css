@@ -20,9 +20,7 @@
 
 .details-btn {
     width: fit-content;
-    padding: 0.5rem 1rem;
     border: var(--border);
-    color: var(--text);
     font-weight: 600;
     font-size: 1.2rem;
     transition: all 0.2s;
