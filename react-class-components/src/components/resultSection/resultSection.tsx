@@ -2,6 +2,9 @@ import './resultSection.css';
 import Card from './card/card';
 import { useGetCharactersQuery } from '../../utils/apiSlice';
 import Loader from '../loader/loader';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearResults, setCurrentPageNumber, setResults } from '../../utils/currentPageSlice';
 
 interface ResultsSectionProps {
     currentPage: number;
@@ -9,6 +12,7 @@ interface ResultsSectionProps {
 }
 
 export default function ResultsSection({ currentPage, searchTerm }: ResultsSectionProps) {
+    const dispatch = useDispatch();
     const {
         data: searchResult,
         isFetching,
@@ -24,6 +28,18 @@ export default function ResultsSection({ currentPage, searchTerm }: ResultsSecti
             content = <p className="no-result">No results found</p>;
         }
     }
+
+    useEffect(() => {
+        if (isSuccess && searchResult) {
+            dispatch(setResults(searchResult));
+            dispatch(setCurrentPageNumber(currentPage));
+            console.log(searchResult, currentPage);
+        }
+        return () => {
+            dispatch(clearResults());
+        };
+    }, [isSuccess, searchResult, dispatch]);
+
     return (
         <div className="left-section">
             {isFetching && <Loader />}

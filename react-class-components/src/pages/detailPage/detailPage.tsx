@@ -20,13 +20,24 @@ export default function DetailPage() {
     const location = useLocation();
     const newURL = `${location.search}${location.hash}`;
 
+    // useEffect(() => {
+    //     if (isSuccess && character && character.length > 0) {
+    //         dispatch(setSelectedItem(character[0]));
+    //     }
+    //     return () => {
+    //         dispatch(clearSelectedItem());
+    //     };
+    // }, [isSuccess, character, dispatch]);
+
     useEffect(() => setSearchParams({ page: `${page}` }), [page, name]);
 
     return (
         <div className="details">
             {isFetching && <Loader />}
             {isError && <div>Error: {error.toString()}</div>}
-            {isSuccess && character.map((person, index) => <DetailCard key={index} character={person} />)}
+            {isSuccess &&
+                !isFetching &&
+                character.map((person, index) => <DetailCard key={index} character={person} />)}
             <button
                 className="close-detail"
                 onClick={() => {

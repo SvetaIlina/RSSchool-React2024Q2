@@ -16,7 +16,7 @@ export default function MainPage() {
     const [, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
     const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm });
-    const totalPages = searchResult?.pageCount ? Math.ceil(searchResult.pageCount / Page.TOTAL) : 0;
+    const totalPages = searchResult?.itemsCount ? Math.ceil(searchResult.itemsCount / Page.TOTAL) : 0;
     const location = useLocation();
 
     useEffect(() => {
