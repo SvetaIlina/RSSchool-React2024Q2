@@ -10,7 +10,7 @@ export const apiSlice = createApi({
                 searchTerm ? `people/?search=${searchTerm}&page=${page}` : `people/?page=${page}`,
             transformResponse: (response: SwapiPeopleResponse): CharactersResponse => ({
                 results: response.results,
-                pageCount: response.count,
+                itemsCount: response.count,
             }),
         }),
         getCharacterByName: builder.query<SwapiPerson[], { name: string }>({

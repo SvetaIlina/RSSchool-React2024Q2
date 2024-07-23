@@ -26,7 +26,7 @@ export interface SwapiPerson {
 
 export interface CharactersResponse {
     results: SwapiPerson[];
-    pageCount: number;
+    itemsCount: number;
 }
 
 export type Props = Record<string, never>;
