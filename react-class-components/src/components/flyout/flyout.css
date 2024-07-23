@@ -1,0 +1,43 @@
+.flyout {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: var(--reserveBg);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+}
+
+.flyout-description {
+    font-size: 2rem;
+}
+
+.btn-container {
+    display: flex;
+    gap: 2rem;
+}
+
+.flyout-btn {
+    border: var(--border);
+    transition: all 0.5s;
+}
+
+.flyout-btn__unselect {
+    border-color: brown;
+}
+
+.flyout-btn__unselect:hover {
+    background: rgba(217, 118, 118, 0.1);
+}
+
+.flyout-btn__download {
+    border-color: darkgreen;
+}
+
+.flyout-btn__download:hover {
+    background: rgba(108, 188, 106, 0.1);
+}

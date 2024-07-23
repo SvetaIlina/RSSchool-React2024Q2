@@ -8,6 +8,7 @@ import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import Pagination from '../../components/pagination/pagination';
 import { useGetCharactersQuery } from '../../utils/apiSlice';
 import { Page } from '../../types/enums';
+import Flyout from '../../components/flyout/flyout';
 
 export default function MainPage() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
@@ -70,6 +71,7 @@ export default function MainPage() {
             {totalPages > 1 && (
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             )}
+            <Flyout />
             <ErrorImitationBtn onclick={simulateError} />
         </div>
     );
