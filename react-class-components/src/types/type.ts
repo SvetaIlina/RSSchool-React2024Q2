@@ -24,4 +24,9 @@ export interface SwapiPerson {
     url: string;
 }
 
+export interface CharactersResponse {
+    results: SwapiPerson[];
+    pageCount: number;
+}
+
 export type Props = Record<string, never>;

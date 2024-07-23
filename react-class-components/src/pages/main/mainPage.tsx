@@ -5,30 +5,19 @@ import SearchSection from '../../components/searchSection/searchSection';
 import useSavedQuery from '../../hooks/useSavedQuery';
 import '../pages.css';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
-import useFetchData from '../../hooks/useFetchData';
 import Pagination from '../../components/pagination/pagination';
+import { useGetCharactersQuery } from '../../utils/apiSlice';
 
 export default function MainPage() {
-    const [savedQuery, setSavedQuery] = useSavedQuery('searchTerm');
+    const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
     const [errorCounter, setErrorCounter] = useState(0);
-    const initialSearchTerm = savedQuery || '';
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [, setSearchParams] = useSearchParams();
     const [currentPage, setCurrentPage] = useState(1);
-    const { data: searchResult, isLoading, totalPages } = useFetchData(initialSearchTerm, currentPage);
+    const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm });
+    const itemPerPage = 10;
+    const totalPages = searchResult?.pageCount ? Math.ceil(searchResult.pageCount / itemPerPage) : 0;
     const location = useLocation();
-
-    useEffect(() => {
-        let newCurrentPage = currentPage;
-
-        if (searchParams.has('page')) {
-            newCurrentPage = parseInt(searchParams.get('page') || '1');
-        }
-
-        if (newCurrentPage !== currentPage) {
-            setCurrentPage(newCurrentPage);
-        }
-    }, [searchParams, currentPage]);
 
     useEffect(() => {
         if (savedQuery) {
@@ -47,7 +36,7 @@ export default function MainPage() {
         setSearchTerm(searchTerm);
     };
 
-    const handleSearchBtnClick = async () => {
+    const handleSearchBtnClick = () => {
         setSavedQuery(searchTerm);
         setSearchParams({ page: '1' });
     };
@@ -58,6 +47,7 @@ export default function MainPage() {
 
     const handlePageChange = (page: number) => {
         setSearchParams({ page: page.toString() });
+        setCurrentPage(page);
     };
 
     return (
@@ -67,15 +57,17 @@ export default function MainPage() {
                 onSearchTermChange={handleSearchTermChange}
                 onSearch={handleSearchBtnClick}
             />
+
             <div className="result-section">
-                <ResultsSection searchResults={searchResult} isReady={!isLoading} />
+                <ResultsSection currentPage={currentPage} searchTerm={savedQuery} />
                 {location.pathname.startsWith('/details') && (
                     <div className="right-section">
                         <Outlet context={currentPage} />
                     </div>
                 )}
             </div>
-            {searchResult.length > 0 && (
+
+            {totalPages > 1 && (
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             )}
             <ErrorImitationBtn onclick={simulateError} />
