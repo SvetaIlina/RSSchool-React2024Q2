@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from './apiSlice';
 import currentPageReducer from './currentPageSlice';
-import selectedItemReducer from './detailSlice';
+import selectedItemReducer from './selectedItemlSlice';
 
 export const store = configureStore({
     reducer: {

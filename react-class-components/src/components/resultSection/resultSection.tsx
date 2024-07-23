@@ -33,7 +33,6 @@ export default function ResultsSection({ currentPage, searchTerm }: ResultsSecti
         if (isSuccess && searchResult) {
             dispatch(setResults(searchResult));
             dispatch(setCurrentPageNumber(currentPage));
-            console.log(searchResult, currentPage);
         }
         return () => {
             dispatch(clearResults());
