@@ -12,6 +12,11 @@
     gap: 1rem;
 }
 
+.wrapper.dark-theme .result-item,
+.wrapper.dark-theme .details-btn {
+    border: var(--border-darkTheme);
+}
+
 .item-title {
     margin-bottom: 0.5rem;
     font-size: 2rem;
@@ -26,6 +31,11 @@
     transition: all 0.2s;
 }
 
-.details-btn:hover {
+.wrapper.dark-theme .details-btn {
+    color: var(--background-darkTheme);
+}
+
+.details-btn:hover,
+.wrapper.dark-theme .details-btn:hover {
     color: var(--accent);
 }

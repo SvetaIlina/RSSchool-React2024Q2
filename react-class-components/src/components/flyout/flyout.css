@@ -12,6 +12,10 @@
     z-index: 1000;
 }
 
+.wrapper.dark-theme .flyout {
+    background: var(--background-darkTheme);
+}
+
 .flyout-description {
     font-size: 2rem;
 }

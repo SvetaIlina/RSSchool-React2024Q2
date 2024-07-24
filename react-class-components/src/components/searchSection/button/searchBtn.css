@@ -7,6 +7,14 @@
     transition: all 0.3s;
 }
 
+.wrapper.dark-theme .search-btn {
+    border: var(--border-darkTheme);
+}
+
 .search-btn:hover {
     color: var(--text);
+}
+
+.wrapper.dark-theme .search-btn:hover {
+    color: var(--background-darkTheme);
 }
