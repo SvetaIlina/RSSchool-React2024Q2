@@ -9,6 +9,7 @@ import Pagination from '../../components/pagination/pagination';
 import { useGetCharactersQuery } from '../../utils/apiSlice';
 import { Page } from '../../types/enums';
 import Flyout from '../../components/flyout/flyout';
+import useTheme from '../../hooks/useTheme';
 
 export default function MainPage() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
@@ -18,6 +19,7 @@ export default function MainPage() {
     const [currentPage, setCurrentPage] = useState(1);
     const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm: savedQuery });
     const totalPages = searchResult?.itemsCount ? Math.ceil(searchResult.itemsCount / Page.TOTAL) : 0;
+    const { isDark, toggleTheme } = useTheme();
     const location = useLocation();
 
     useEffect(() => {
@@ -32,6 +34,10 @@ export default function MainPage() {
             throw new Error('I crashed!');
         }
     }, [errorCounter]);
+
+    useEffect(() => {
+        document.body.style.backgroundColor = isDark ? '#123c69' : '#eee2dc';
+    }, [isDark]);
 
     const handleSearchTermChange = (searchTerm: string) => {
         setSearchTerm(searchTerm);
@@ -52,7 +58,7 @@ export default function MainPage() {
     };
 
     return (
-        <div className="wrapper">
+        <div className={`wrapper ${isDark ? 'dark-theme' : ''}`}>
             <SearchSection
                 searchTerm={searchTerm}
                 onSearchTermChange={handleSearchTermChange}
@@ -73,6 +79,9 @@ export default function MainPage() {
             )}
             <Flyout />
             <ErrorImitationBtn onclick={simulateError} />
+            <button className="toggle-theme-btn" onClick={toggleTheme}>
+                Toggle Theme
+            </button>
         </div>
     );
 }
