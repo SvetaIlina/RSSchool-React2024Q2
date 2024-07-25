@@ -46,6 +46,7 @@ export default function MainPage() {
     const handleSearchBtnClick = () => {
         setSavedQuery(searchTerm);
         setSearchParams({ page: '1' });
+        setCurrentPage(1);
     };
 
     const simulateError = () => {
