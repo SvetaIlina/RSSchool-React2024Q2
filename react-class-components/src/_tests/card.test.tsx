@@ -2,8 +2,8 @@
 /// <reference types="vitest" />
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { mockResults } from './mockData';
+import { describe, it, expect, beforeEach } from 'vitest';
+import { mockNavigate, mockResults } from './mockData';
 import Card from '../components/resultSection/card/card';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -11,16 +11,7 @@ import { store } from '../utils/store';
 import DetailPage from '../pages/detailPage/detailPage';
 import { server } from '../setupTests';
 
-const mockNavigate = vi.fn();
 const character = mockResults.results[0];
-
-vi.mock('react-router-dom', async (importOriginal) => {
-    const actual = await importOriginal<typeof import('react-router-dom')>();
-    return {
-        ...actual,
-        useNavigate: () => mockNavigate,
-    };
-});
 
 describe('Card Component', () => {
     beforeEach(() => {

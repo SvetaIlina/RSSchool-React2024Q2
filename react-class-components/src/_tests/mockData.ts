@@ -1,3 +1,4 @@
+import { vi } from 'vitest';
 import { SwapiPeopleResponse, SwapiPerson } from '../types/type';
 // import { vi } from 'vitest';
 
@@ -84,35 +85,12 @@ export const emptyMockResults: SwapiPeopleResponse = {
     results: [],
 };
 
-// export function useMockFetchData(searchTerm: string) {
-//     const [data, setData] = useState<SwapiPerson[]>([]);
-//     const [isLoading, setIsLoading] = useState(false);
-//     const [totalPages, setTotalPages] = useState(0);
+export const mockNavigate = vi.fn();
 
-//     useEffect(() => {
-//         async function fetchDataAsync() {
-//             await new Promise((resolve) => setTimeout(resolve, 1000));
-//             setData(mockResults);
-//             setIsLoading(false);
-//             setTotalPages(3);
-//         }
-
-//         fetchDataAsync();
-//     }, [searchTerm]);
-
-//     return { data, isLoading, totalPages };
-// }
-// export function mockParams() {
-//     vi.mock('react-router-dom', async (importOriginal) => {
-//         const actual = await importOriginal<typeof import('react-router-dom')>();
-//         return {
-//             ...actual,
-//             useParams: () => ({ name: 'Luke Skywalker' }),
-//         };
-//     });
-// }
-// export function mockFetch() {
-//     vi.mock('@hooks/useFetchData', () => ({
-//         useFetchData: (searchTerm: string) => useMockFetchData(searchTerm),
-//     }));
-// }
+vi.mock('react-router-dom', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('react-router-dom')>();
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
+});
