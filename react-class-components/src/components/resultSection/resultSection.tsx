@@ -4,7 +4,7 @@ import { useGetCharactersQuery } from '../../utils/apiSlice';
 import Loader from '../loader/loader';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { clearResults, setCurrentPageNumber, setResults } from '../../utils/currentPageSlice';
+import { setCurrentPageNumber, setResults } from '../../utils/currentPageSlice';
 
 interface ResultsSectionProps {
     currentPage: number;
@@ -34,9 +34,6 @@ export default function ResultsSection({ currentPage, searchTerm }: ResultsSecti
             dispatch(setResults(searchResult));
             dispatch(setCurrentPageNumber(currentPage));
         }
-        return () => {
-            dispatch(clearResults());
-        };
     }, [isSuccess, searchResult, dispatch]);
 
     return (

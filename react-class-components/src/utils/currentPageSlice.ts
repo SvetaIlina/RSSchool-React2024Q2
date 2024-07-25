@@ -11,7 +11,7 @@ export interface currentPageState {
 
 const initialState: currentPageState = {
     totalPage: 0,
-    currentPage: 0,
+    currentPage: 1,
     results: [],
 };
 

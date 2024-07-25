@@ -6,21 +6,22 @@ import useSavedQuery from '../../hooks/useSavedQuery';
 import '../pages.css';
 import { Outlet, useLocation, useSearchParams } from 'react-router-dom';
 import Pagination from '../../components/pagination/pagination';
-import { useGetCharactersQuery } from '../../utils/apiSlice';
-import { Page } from '../../types/enums';
 import Flyout from '../../components/flyout/flyout';
 import useTheme from '../../hooks/useTheme';
+import { useSelector } from 'react-redux';
+import { getCurrentPage, getTotalPage, setCurrentPageNumber } from '../../utils/currentPageSlice';
+import { useDispatch } from 'react-redux';
 
 export default function MainPage() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
     const [errorCounter, setErrorCounter] = useState(0);
     const [, setSearchParams] = useSearchParams();
-    const [currentPage, setCurrentPage] = useState(1);
-    const { data: searchResult } = useGetCharactersQuery({ page: currentPage, searchTerm: savedQuery });
-    const totalPages = searchResult?.itemsCount ? Math.ceil(searchResult.itemsCount / Page.TOTAL) : 0;
+    const currentPage = useSelector(getCurrentPage);
+    const totalPages = useSelector(getTotalPage);
     const { isDark, toggleTheme } = useTheme();
     const location = useLocation();
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (savedQuery) {
@@ -46,16 +47,11 @@ export default function MainPage() {
     const handleSearchBtnClick = () => {
         setSavedQuery(searchTerm);
         setSearchParams({ page: '1' });
-        setCurrentPage(1);
+        dispatch(setCurrentPageNumber(1));
     };
 
     const simulateError = () => {
         setErrorCounter((prev) => prev + 1);
-    };
-
-    const handlePageChange = (page: number) => {
-        setSearchParams({ page: page.toString() });
-        setCurrentPage(page);
     };
 
     return (
@@ -75,9 +71,7 @@ export default function MainPage() {
                 )}
             </div>
 
-            {totalPages > 1 && (
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-            )}
+            {totalPages > 1 && <Pagination />}
             <Flyout />
             <ErrorImitationBtn onclick={simulateError} />
             <button className="toggle-theme-btn" onClick={toggleTheme}>
