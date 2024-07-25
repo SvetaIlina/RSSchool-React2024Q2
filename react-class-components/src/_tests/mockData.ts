@@ -1,4 +1,4 @@
-import { SwapiPeopleResponse } from '../types/type';
+import { SwapiPeopleResponse, SwapiPerson } from '../types/type';
 // import { vi } from 'vitest';
 
 export const mockResults: SwapiPeopleResponse = {
@@ -50,6 +50,33 @@ export const mockResults: SwapiPeopleResponse = {
         },
     ],
 };
+export const mockSearchResults: SwapiPerson[] = [
+    {
+        name: 'Luke Skywalker',
+        height: '172',
+        mass: '77',
+        hair_color: 'blond',
+        skin_color: 'fair',
+        eye_color: 'blue',
+        birth_year: '19BBY',
+        gender: 'male',
+        homeworld: 'Tatooine',
+        films: [
+            'A New Hope',
+            'The Empire Strikes Back',
+            'Return of the Jedi',
+            'Revenge of the Sith',
+            'The Force Awakens',
+        ],
+        species: [],
+        vehicles: ['Snowspeeder', 'Imperial Speeder Bike'],
+        starships: ['X-wing', 'Imperial shuttle'],
+        created: '2014-12-09T13:50:51.644000Z',
+        edited: '2014-12-20T21:17:56.891000Z',
+        url: 'https://swapi.dev/api/people/1/',
+    },
+];
+
 export const emptyMockResults: SwapiPeopleResponse = {
     count: 0,
     next: null,
