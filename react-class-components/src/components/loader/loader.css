@@ -4,6 +4,10 @@
     right: 50%;
 }
 
+.details > .loader-wrapper {
+    position: static;
+}
+
 .loader {
     width: 48px;
     height: 48px;

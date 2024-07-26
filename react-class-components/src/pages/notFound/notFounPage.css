@@ -1,0 +1,14 @@
+.not-found {
+    height: 30rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+}
+
+.notFound-button {
+    color: var(--accent);
+    font-size: 1.5rem;
+    font-weight: 600;
+}

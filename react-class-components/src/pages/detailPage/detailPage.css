@@ -1,0 +1,13 @@
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 5rem;
+}
+
+.close-detail {
+    color: var(--accent);
+    font-size: 3rem;
+    position: absolute;
+    top: 0;
+    right: 1rem;
+}

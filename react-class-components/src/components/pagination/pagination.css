@@ -1,0 +1,27 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination-btn {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.pagination-btn:hover {
+    color: var(--accent);
+}
+
+.pagination-btn:disabled {
+    color: #bab2b5;
+}
+
+.pagination span {
+    margin: 0 10px;
+    color: var(--accent);
+}

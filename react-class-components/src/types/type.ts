@@ -1,6 +1,6 @@
 export interface SwapiPeopleResponse {
     count: number;
-    next: string;
+    next: null | string;
     previous: null | string;
     results: SwapiPerson[];
 }
