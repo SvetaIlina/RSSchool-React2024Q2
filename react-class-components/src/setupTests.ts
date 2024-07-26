@@ -9,7 +9,7 @@ const handlers = [
         const url = new URL(request.url);
         const search = url.searchParams.get('search');
 
-        if (search === 'rrr') {
+        if (search === 'ddd') {
             return HttpResponse.json(emptyMockResults, { status: 200 });
         }
         if (search === 'Luke%20Skywalker') {

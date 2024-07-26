@@ -5,10 +5,12 @@ import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../utils/apiSlice';
+import currentPageReducer from '../utils/currentPageSlice';
 
 let store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
+        currentPage: currentPageReducer,
     },
 
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
@@ -18,6 +20,7 @@ beforeEach(() => {
     store = configureStore({
         reducer: {
             [apiSlice.reducerPath]: apiSlice.reducer,
+            currentPage: currentPageReducer,
         },
 
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),

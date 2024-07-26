@@ -8,12 +8,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../utils/apiSlice';
 import selectedItemReducer from '../utils/selectedItemlSlice';
 import currentPageReducer from '../utils/currentPageSlice';
+import searchTermReduser from '../utils/searchTermSlice';
 
 let store = configureStore({
     reducer: {
         [apiSlice.reducerPath]: apiSlice.reducer,
         currentPage: currentPageReducer,
         selectedItem: selectedItemReducer,
+        searchTerm: searchTermReduser,
     },
 
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
@@ -25,6 +27,7 @@ beforeEach(() => {
             [apiSlice.reducerPath]: apiSlice.reducer,
             currentPage: currentPageReducer,
             selectedItem: selectedItemReducer,
+            searchTerm: searchTermReduser,
         },
 
         middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
