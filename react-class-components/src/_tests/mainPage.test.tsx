@@ -34,7 +34,7 @@ beforeEach(() => {
     });
 });
 
-describe('Flyout Component', () => {
+describe('Main Page', () => {
     it('when at least 1 item has been selected, the flyout element should appear', async () => {
         render(
             <Provider store={store}>
@@ -51,5 +51,26 @@ describe('Flyout Component', () => {
             expect(store.getState().selectedItem.details.length).toBe(2);
             expect(screen.getByText('You have 2 favorite characters')).toBeInTheDocument();
         });
+    });
+    it('toggles theme on button click', () => {
+        const { container } = render(
+            <Provider store={store}>
+                <MemoryRouter>
+                    <ThemeProvider>
+                        <MainPage />
+                    </ThemeProvider>
+                </MemoryRouter>
+            </Provider>
+        );
+        const wrapper = container.querySelector('.wrapper');
+        const toggleButton = screen.getByText('Toggle Theme');
+        expect(wrapper).not.toHaveClass('dark-theme');
+        expect(document.body.style.backgroundColor).toBe('rgb(238, 226, 220)');
+        fireEvent.click(toggleButton);
+        expect(wrapper).toHaveClass('dark-theme');
+        expect(wrapper).toBeInTheDocument();
+        expect(document.body.style.backgroundColor).toBe('rgb(18, 60, 105)');
+        fireEvent.click(toggleButton);
+        expect(document.body.style.backgroundColor).toBe('rgb(238, 226, 220)');
     });
 });
