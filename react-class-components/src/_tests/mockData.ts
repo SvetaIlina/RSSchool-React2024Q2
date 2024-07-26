@@ -1,6 +1,5 @@
 import { vi } from 'vitest';
 import { SwapiPeopleResponse, SwapiPerson } from '../types/type';
-// import { vi } from 'vitest';
 
 export const mockResults: SwapiPeopleResponse = {
     count: 2,
