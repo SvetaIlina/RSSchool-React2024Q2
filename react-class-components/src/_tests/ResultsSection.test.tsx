@@ -1,27 +1,59 @@
-import { render } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { render, screen, waitFor } from '@testing-library/react';
 import ResultsSection from '../components/resultSection/resultSection';
+import { describe, it, expect } from 'vitest';
+import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import { mockResults } from './mockData';
+import { configureStore } from '@reduxjs/toolkit';
+import { apiSlice } from '../utils/apiSlice';
+import selectedItemReducer from '../utils/selectedItemlSlice';
+import currentPageReducer from '../utils/currentPageSlice';
+import searchTermReduser, { searchTermState } from '../utils/searchTermSlice';
 
-describe('ResultsSection component', () => {
-    it('renders the specified number of cards', () => {
-        const { getAllByRole } = render(
-            <MemoryRouter>
-                <ResultsSection searchResults={mockResults} isReady={true} />
-            </MemoryRouter>
-        );
-        const cards = getAllByRole('heading', { level: 3 });
-        expect(cards).toHaveLength(mockResults.length);
+type PreloadedState = { searchTerm: searchTermState };
+
+const preloadedState: PreloadedState = {
+    searchTerm: {
+        searchTerm: 'ddd',
+    },
+};
+
+const createStore = (preloadedState?: PreloadedState) =>
+    configureStore({
+        reducer: {
+            [apiSlice.reducerPath]: apiSlice.reducer,
+            currentPage: currentPageReducer,
+            selectedItem: selectedItemReducer,
+            searchTerm: searchTermReduser,
+        },
+        preloadedState,
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
     });
 
-    it('displays "No results found" message when searchResults is empty', () => {
-        const { getByText } = render(
-            <MemoryRouter>
-                <ResultsSection searchResults={[]} isReady={true} />
-            </MemoryRouter>
+describe('ResulSection Component', () => {
+    it('renders the correct number of cards based on the API response', async () => {
+        render(
+            <Provider store={createStore()}>
+                <MemoryRouter>
+                    <ResultsSection />
+                </MemoryRouter>
+            </Provider>
         );
-        const noResultMessage = getByText('No results found');
-        expect(noResultMessage).toBeInTheDocument();
+
+        await waitFor(() => {
+            expect(screen.getAllByRole('heading')).toHaveLength(2);
+        });
+    });
+    it('Check that an appropriate message is displayed if no cards are present.', async () => {
+        render(
+            <Provider store={createStore(preloadedState)}>
+                <MemoryRouter>
+                    <ResultsSection />
+                </MemoryRouter>
+            </Provider>
+        );
+
+        await waitFor(() => {
+            expect(screen.getByText('No results found')).toBeInTheDocument();
+        });
     });
 });

@@ -9,6 +9,12 @@
     color: var(--text);
 }
 
+.wrapper.dark-theme .search-input {
+    border: var(--border-darkTheme);
+    background: var(--text);
+    color: var(--background);
+}
+
 .search-input:focus {
     outline: none;
 }

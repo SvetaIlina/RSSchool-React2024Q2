@@ -13,11 +13,17 @@
     font-size: 1rem;
 }
 
-.pagination-btn:hover {
+.wrapper.dark-theme .pagination-btn {
+    color: var(--reserveBg);
+}
+
+.pagination-btn:hover,
+.wrapper.dark-theme .pagination-btn:hover {
     color: var(--accent);
 }
 
-.pagination-btn:disabled {
+.pagination-btn:disabled,
+.wrapper.dark-theme .pagination-btn:disabled {
     color: #bab2b5;
 }
 

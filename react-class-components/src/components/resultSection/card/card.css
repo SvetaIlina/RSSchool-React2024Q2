@@ -6,10 +6,36 @@
     padding: 1rem;
     text-align: center;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.wrapper.dark-theme .result-item,
+.wrapper.dark-theme .details-btn {
+    border: var(--border-darkTheme);
 }
 
 .item-title {
     margin-bottom: 0.5rem;
     font-size: 2rem;
+    color: var(--accent);
+}
+
+.details-btn {
+    width: fit-content;
+    border: var(--border);
+    font-weight: 600;
+    font-size: 1.2rem;
+    transition: all 0.2s;
+}
+
+.wrapper.dark-theme .details-btn {
+    color: var(--background-darkTheme);
+}
+
+.details-btn:hover,
+.wrapper.dark-theme .details-btn:hover {
     color: var(--accent);
 }

@@ -1,6 +1,8 @@
 :root {
     --background: #eee2dc;
+    --background-darkTheme: #bab2b5;
     --border: 2px solid #bab2b5;
+    --border-darkTheme: 2px solid #edc7b7;
     --reserveBg: #edc7b7;
     --text: #123c69;
     --accent: #ac3b61;
@@ -34,6 +36,8 @@ button {
     text-transform: uppercase;
     border: none;
     border-radius: 10px;
+    padding: 0.5rem 1rem;
+    color: var(--text);
 }
 
 body {

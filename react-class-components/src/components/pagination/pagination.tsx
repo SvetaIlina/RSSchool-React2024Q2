@@ -1,21 +1,34 @@
+import { useSelector } from 'react-redux';
+import { getCurrentPage, getTotalPage, setCurrentPageNumber } from '../../utils/currentPageSlice';
 import './pagination.css';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-interface PaginationProps {
-    currentPage: number;
-    totalPages: number;
-    onPageChange: (page: number) => void;
-}
+export default function Pagination() {
+    const currentPage = useSelector(getCurrentPage);
+    const totalPages = useSelector(getTotalPage);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [newSearch, setNewSearch] = useState('');
+    const newURL = `${location.pathname}${newSearch}${location.hash}`;
 
-export default function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+    useEffect(() => navigate(`${newURL}`), [newURL]);
+
     const handlePrevious = () => {
         if (currentPage > 1) {
-            onPageChange(currentPage - 1);
+            const page = currentPage - 1;
+            setNewSearch(`?page=${page}`);
+            dispatch(setCurrentPageNumber(page));
         }
     };
 
     const handleNext = () => {
         if (currentPage < totalPages) {
-            onPageChange(currentPage + 1);
+            const page = currentPage + 1;
+            setNewSearch(`?page=${page}`);
+            dispatch(setCurrentPageNumber(page));
         }
     };
 

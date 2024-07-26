@@ -1,5 +1,4 @@
 .result-section {
-    position: relative;
     flex-grow: 1;
     border-top: 1px solid var(--accent);
     padding-top: 3rem;
@@ -8,6 +7,7 @@
 }
 
 .left-section {
+    position: relative;
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -25,7 +25,17 @@
     width: 60rem;
 }
 
+.wrapper.dark-theme .right-section,
+.wrapper.dark-theme .left-section {
+    color: var(--reserveBg);
+}
+
+.wrapper.dark-theme .right-section {
+    border: var(--border-darkTheme);
+}
+
 .no-result {
     font-size: 4rem;
     color: #bab2b5;
+    grid-column: 1/4;
 }

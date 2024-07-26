@@ -1,8 +1,31 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import DetailPage from '../pages/detailPage/detailPage'; // Путь к вашему компоненту DetailPage
-import { describe, it, expect, vi } from 'vitest';
+import DetailPage from '../pages/detailPage/detailPage';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { useMockFetchData } from './mockData';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import { apiSlice } from '../utils/apiSlice';
+import currentPageReducer from '../utils/currentPageSlice';
+
+let store = configureStore({
+    reducer: {
+        [apiSlice.reducerPath]: apiSlice.reducer,
+        currentPage: currentPageReducer,
+    },
+
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+});
+
+beforeEach(() => {
+    store = configureStore({
+        reducer: {
+            [apiSlice.reducerPath]: apiSlice.reducer,
+            currentPage: currentPageReducer,
+        },
+
+        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+    });
+});
 
 vi.mock('react-router-dom', async (importOriginal) => {
     const actual = await importOriginal<typeof import('react-router-dom')>();
@@ -12,16 +35,14 @@ vi.mock('react-router-dom', async (importOriginal) => {
     };
 });
 
-vi.mock('@hooks/useFetchData', () => ({
-    useFetchData: (searchTerm: string) => useMockFetchData(searchTerm),
-}));
-
 describe('DetailPage Component', () => {
     it('should render detail page with correct character information', async () => {
         render(
-            <MemoryRouter>
-                <DetailPage />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <DetailPage />
+                </MemoryRouter>
+            </Provider>
         );
 
         await waitFor(() => {
@@ -34,12 +55,13 @@ describe('DetailPage Component', () => {
             expect(description).toBeInTheDocument();
         });
     });
-
     it('loading indicator is displayed while fetching data', async () => {
         const { container } = render(
-            <MemoryRouter>
-                <DetailPage />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <DetailPage />
+                </MemoryRouter>
+            </Provider>
         );
         const loader = container.querySelector('.loader-wrapper');
         expect(loader).toBeInTheDocument();
@@ -50,9 +72,11 @@ describe('DetailPage Component', () => {
     });
     it('clicking the close button hides the component', () => {
         render(
-            <MemoryRouter>
-                <DetailPage />
-            </MemoryRouter>
+            <Provider store={store}>
+                <MemoryRouter>
+                    <DetailPage />
+                </MemoryRouter>
+            </Provider>
         );
         const closeBtn = screen.getByRole('button');
         fireEvent.click(closeBtn);
