@@ -4,14 +4,13 @@ import { useGetCharactersQuery } from '../../utils/apiSlice';
 import Loader from '../loader/loader';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrentPageNumber, setResults } from '../../utils/currentPageSlice';
+import { getCurrentPage, setCurrentPageNumber, setResults } from '../../utils/currentPageSlice';
+import { useSelector } from 'react-redux';
+import { getSearchTerm } from '../../utils/searchTermSlice';
 
-interface ResultsSectionProps {
-    currentPage: number;
-    searchTerm: string | null;
-}
-
-export default function ResultsSection({ currentPage, searchTerm }: ResultsSectionProps) {
+export default function ResultsSection() {
+    const searchTerm = useSelector(getSearchTerm);
+    const currentPage = useSelector(getCurrentPage);
     const dispatch = useDispatch();
     const {
         data: searchResult,
@@ -20,6 +19,7 @@ export default function ResultsSection({ currentPage, searchTerm }: ResultsSecti
         isError,
         error,
     } = useGetCharactersQuery({ page: currentPage, searchTerm });
+
     let content: React.ReactNode;
     if (searchResult) {
         if (searchResult.results.length > 0) {
