@@ -5,12 +5,14 @@ import useSavedQuery from '../../hooks/useSavedQuery';
 import { setCurrentPageNumber } from '../../utils/currentPageSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setTerm } from '../../utils/searchTermSlice';
+import { useRouter } from 'next/router';
 
 export default function SearchSection() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
     const dispatch = useDispatch();
+    const router = useRouter();
+
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         handleSearchBtnClick();
@@ -23,15 +25,29 @@ export default function SearchSection() {
     const handleSearchBtnClick = () => {
         setSavedQuery(searchTerm);
         dispatch(setCurrentPageNumber(1));
-        dispatch(setTerm(searchTerm));
     };
 
     useEffect(() => {
         if (savedQuery) {
             setSearchTerm(savedQuery);
-            dispatch(setTerm(savedQuery));
+            router.push(
+                {
+                    pathname: router.pathname,
+                    query: { ...router.query, searchTerm: savedQuery },
+                },
+                undefined,
+                { shallow: false }
+            );
+        } else {
+            router.push(
+                {
+                    pathname: router.pathname,
+                },
+                undefined,
+                { shallow: false }
+            );
         }
-    }, []);
+    }, [savedQuery]);
     return (
         <form className={styles.searchSection} onSubmit={onFormSubmit}>
             <SearchInput value={searchTerm} onChange={handleSearchTermChange} />

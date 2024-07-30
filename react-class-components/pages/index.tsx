@@ -6,13 +6,45 @@ import Pagination from '../src/components/pagination/pagination';
 import Flyout from '../src/components/flyout/flyout';
 import useTheme from '../src/hooks/useTheme';
 import { useSelector } from 'react-redux';
-import { getTotalPage } from '../src/utils/currentPageSlice';
+import { getTotalPage, setResults } from '../src/utils/currentPageSlice';
 import React from 'react';
+import { CharactersResponse } from '../src/types/type';
+import { wrapper } from '../src/utils/store';
+import { apiSlice } from '../src/utils/apiSlice';
+import { GetServerSideProps } from 'next/types';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 
-export default function MainPage() {
+interface MainPageProps {
+    initialData: CharactersResponse;
+}
+
+export default function MainPage({ initialData }: MainPageProps) {
     const [errorCounter, setErrorCounter] = useState(0);
     const totalPages = useSelector(getTotalPage);
     const { isDark, toggleTheme } = useTheme();
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const { query } = router;
+
+    useEffect(() => {
+        if (!query.page) {
+            router.push(
+                {
+                    pathname: router.pathname,
+                    query: { ...query, page: 1 },
+                },
+                undefined,
+                { shallow: false }
+            );
+        }
+    }, [query.page, router]);
+
+    useEffect(() => {
+        if (initialData) {
+            dispatch(setResults(initialData));
+        }
+    }, [initialData]);
 
     useEffect(() => {
         if (errorCounter > 1) {
@@ -33,7 +65,7 @@ export default function MainPage() {
             <SearchSection />
 
             <div className="result-section">
-                <ResultsSection />
+                <ResultsSection initialData={initialData} />
             </div>
 
             {totalPages > 1 && <Pagination />}
@@ -45,3 +77,17 @@ export default function MainPage() {
         </div>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
+    const { query } = context;
+    const page = query.page ? parseInt(query.page as string, 10) : 1;
+    const searchTerm = query.searchTerm || '';
+
+    const { data: initialData } = await store.dispatch(apiSlice.endpoints.getCharacters.initiate({ page, searchTerm }));
+
+    return {
+        props: {
+            initialData,
+        },
+    };
+});

@@ -1,48 +1,24 @@
 import styles from './resultSection.module.css';
 import Card from './card/card';
-import { useGetCharactersQuery } from '../../utils/apiSlice';
-import Loader from '../loader/loader';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { getCurrentPage, setCurrentPageNumber, setResults } from '../../utils/currentPageSlice';
-import { useSelector } from 'react-redux';
-import { getSearchTerm } from '../../utils/searchTermSlice';
 import useTheme from '../../hooks/useTheme';
+import { CharactersResponse } from '../../types/type';
 
-export default function ResultsSection() {
-    const searchTerm = useSelector(getSearchTerm);
-    const currentPage = useSelector(getCurrentPage);
-    const dispatch = useDispatch();
-    const {
-        data: searchResult,
-        isFetching,
-        isSuccess,
-        isError,
-        error,
-    } = useGetCharactersQuery({ page: currentPage, searchTerm });
+interface ResultsSectionProps {
+    initialData: CharactersResponse;
+}
+
+export default function ResultsSection({ initialData }: ResultsSectionProps) {
+    const searchResult = initialData.results;
     const { isDark } = useTheme();
 
     let content: React.ReactNode;
     if (searchResult) {
-        if (searchResult.results.length > 0) {
-            content = searchResult.results.map((result, index) => <Card key={index} character={result} />);
+        if (searchResult.length > 0) {
+            content = searchResult.map((result, index) => <Card key={index} character={result} />);
         } else {
             content = <p className={styles.noResult}>No results found</p>;
         }
     }
 
-    useEffect(() => {
-        if (isSuccess && searchResult) {
-            dispatch(setResults(searchResult));
-            dispatch(setCurrentPageNumber(currentPage));
-        }
-    }, [isSuccess, searchResult, dispatch]);
-
-    return (
-        <div className={`${styles.leftSection} ${isDark ? styles.leftSectionDark : ''}`}>
-            {isFetching && <Loader />}
-            {isError && <div>Error: {error.toString()}</div>}
-            {isSuccess && !isFetching && content}
-        </div>
-    );
+    return <div className={`${styles.leftSection} ${isDark ? styles.leftSectionDark : ''}`}>{content}</div>;
 }

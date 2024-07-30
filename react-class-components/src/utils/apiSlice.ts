@@ -5,7 +5,7 @@ export const apiSlice = createApi({
     reducerPath: 'Swapi',
     baseQuery: fetchBaseQuery({ baseUrl: 'https://swapi.dev/api/' }),
     endpoints: (builder) => ({
-        getCharacters: builder.query<CharactersResponse, { page: number; searchTerm: string | null }>({
+        getCharacters: builder.query<CharactersResponse, { page: number; searchTerm: string | string[] | null }>({
             query: ({ page, searchTerm }) =>
                 searchTerm ? `people/?search=${searchTerm}&page=${page}` : `people/?page=${page}`,
             transformResponse: (response: SwapiPeopleResponse): CharactersResponse => ({
