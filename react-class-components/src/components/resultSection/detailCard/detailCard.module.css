@@ -1,0 +1,11 @@
+.detailDescription {
+    font-size: 3rem;
+    line-height: 3.5rem;
+}
+
+.detailTitle {
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+    color: var(--accent);
+}

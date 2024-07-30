@@ -1,9 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import { SwapiPerson } from '../../../types/type';
-import './card.css';
+import styles from './card.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedItemsDetails, toggleItemSelection } from '../../../utils/selectedItemlSlice';
 import SelectCheckBox from '../checkBox/checkBox';
+import useTheme from '../../../hooks/useTheme';
+import { useRouter } from 'next/router';
 
 interface CardProps {
     character: SwapiPerson;
@@ -11,11 +12,12 @@ interface CardProps {
 
 export default function Card({ character }: CardProps) {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const selectedItems = useSelector(getSelectedItemsDetails);
+    const { isDark } = useTheme();
+    const router = useRouter();
 
     const handleShowDetails = (name: string) => {
-        navigate(`details/${name}`, { replace: true });
+        router.push(`/details/${name}`);
     };
 
     const handleCheckboxChange = () => {
@@ -25,9 +27,12 @@ export default function Card({ character }: CardProps) {
     const isSelected = selectedItems.some((item) => item.name === character.name);
 
     return (
-        <div className="result-item">
-            <h3 className="item-title">{character.name}</h3>
-            <button className="details-btn" onClick={() => handleShowDetails(character.name)}>
+        <div className={`${styles.resultItem} ${isDark ? styles.resultItemDark : ''}`}>
+            <h3 className={styles.itemTitle}>{character.name}</h3>
+            <button
+                className={`${styles.detailsBtn} ${isDark ? styles.detailsBtnDark : ''}`}
+                onClick={() => handleShowDetails(character.name)}
+            >
                 Show Details
             </button>
             <SelectCheckBox isSelected={isSelected} handleChange={handleCheckboxChange} />

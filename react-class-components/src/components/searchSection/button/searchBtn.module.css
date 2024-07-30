@@ -1,4 +1,4 @@
-.search-btn {
+.searchBtn {
     border: var(--border);
     height: 100%;
     padding: 8px 16px;
@@ -7,14 +7,14 @@
     transition: all 0.3s;
 }
 
-.wrapper.dark-theme .search-btn {
+.darkThemeSearchBtn {
     border: var(--border-darkTheme);
 }
 
-.search-btn:hover {
+.searchBtn:hover {
     color: var(--text);
 }
 
-.wrapper.dark-theme .search-btn:hover {
+.darkThemeSearchBtn:hover {
     color: var(--background-darkTheme);
 }

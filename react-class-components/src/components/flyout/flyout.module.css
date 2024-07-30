@@ -12,36 +12,33 @@
     z-index: 1000;
 }
 
-.wrapper.dark-theme .flyout {
+.flyoutDark {
     background: var(--background-darkTheme);
 }
 
-.flyout-description {
+.flyoutDescription {
     font-size: 2rem;
 }
 
-.btn-container {
+.btnContainer {
     display: flex;
     gap: 2rem;
 }
 
-.flyout-btn {
-    border: var(--border);
+.flyoutBtnUnselect {
+    border: 2px solid brown;
     transition: all 0.5s;
 }
 
-.flyout-btn__unselect {
-    border-color: brown;
-}
-
-.flyout-btn__unselect:hover {
+.flyoutBtnUnselect:hover {
     background: rgba(217, 118, 118, 0.1);
 }
 
-.flyout-btn__download {
-    border-color: darkgreen;
+.flyoutBtnDownload {
+    border: 2px solid darkgreen;
+    transition: all 0.5s;
 }
 
-.flyout-btn__download:hover {
+.flyoutBtnDownload:hover {
     background: rgba(108, 188, 106, 0.1);
 }

@@ -1,4 +1,4 @@
-.result-item {
+.resultItem {
     width: 100%;
     height: fit-content;
     border: var(--border);
@@ -12,18 +12,18 @@
     gap: 1rem;
 }
 
-.wrapper.dark-theme .result-item,
-.wrapper.dark-theme .details-btn {
+.resultItemDark,
+.detailsBtnDark {
     border: var(--border-darkTheme);
 }
 
-.item-title {
+.itemTitle {
     margin-bottom: 0.5rem;
     font-size: 2rem;
     color: var(--accent);
 }
 
-.details-btn {
+.detailsBtn {
     width: fit-content;
     border: var(--border);
     font-weight: 600;
@@ -31,11 +31,10 @@
     transition: all 0.2s;
 }
 
-.wrapper.dark-theme .details-btn {
+.detailsBtnDark {
     color: var(--background-darkTheme);
 }
 
-.details-btn:hover,
-.wrapper.dark-theme .details-btn:hover {
+.detailsBtn:hover {
     color: var(--accent);
 }

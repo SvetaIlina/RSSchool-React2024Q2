@@ -1,4 +1,4 @@
-import './checkBox.css';
+import styles from './checkBox.module.css';
 
 interface SelectCheckBoxProps {
     isSelected: boolean;
@@ -7,8 +7,8 @@ interface SelectCheckBoxProps {
 
 export default function SelectCheckBox({ isSelected, handleChange }: SelectCheckBoxProps) {
     return (
-        <div className="select-field">
-            <label id="favorites" className="item-checkbox-label">
+        <div className={styles.selectField}>
+            <label id="favorites" className={styles.itemCheckboxLabel}>
                 Add to favorites
             </label>
             <input
@@ -16,7 +16,7 @@ export default function SelectCheckBox({ isSelected, handleChange }: SelectCheck
                 type="checkbox"
                 checked={isSelected}
                 onChange={handleChange}
-                className="item-checkbox"
+                className={styles.itemCheckbox}
             />
         </div>
     );

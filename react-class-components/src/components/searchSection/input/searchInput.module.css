@@ -1,4 +1,4 @@
-.search-input {
+.searchInput {
     width: 80%;
     height: 100%;
     border-radius: 1rem;
@@ -9,12 +9,12 @@
     color: var(--text);
 }
 
-.wrapper.dark-theme .search-input {
+.darkThemeInput {
     border: var(--border-darkTheme);
     background: var(--text);
     color: var(--background);
 }
 
-.search-input:focus {
+.searchInput:focus {
     outline: none;
 }

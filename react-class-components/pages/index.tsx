@@ -1,20 +1,18 @@
 import { useState, useEffect } from 'react';
-import ErrorImitationBtn from '../../components/errorBoundary/errorImitationButton/errorImitationButton';
-import ResultsSection from '../../components/resultSection/resultSection';
-import SearchSection from '../../components/searchSection/searchSection';
-import '../pages.css';
-import { Outlet, useLocation } from 'react-router-dom';
-import Pagination from '../../components/pagination/pagination';
-import Flyout from '../../components/flyout/flyout';
-import useTheme from '../../hooks/useTheme';
+import ErrorImitationBtn from '../src/components/errorBoundary/errorImitationButton/errorImitationButton';
+import ResultsSection from '../src/components/resultSection/resultSection';
+import SearchSection from '../src/components/searchSection/searchSection';
+import Pagination from '../src/components/pagination/pagination';
+import Flyout from '../src/components/flyout/flyout';
+import useTheme from '../src/hooks/useTheme';
 import { useSelector } from 'react-redux';
-import { getTotalPage } from '../../utils/currentPageSlice';
+import { getTotalPage } from '../src/utils/currentPageSlice';
+import React from 'react';
 
 export default function MainPage() {
     const [errorCounter, setErrorCounter] = useState(0);
     const totalPages = useSelector(getTotalPage);
     const { isDark, toggleTheme } = useTheme();
-    const location = useLocation();
 
     useEffect(() => {
         if (errorCounter > 1) {
@@ -36,11 +34,6 @@ export default function MainPage() {
 
             <div className="result-section">
                 <ResultsSection />
-                {location.pathname.startsWith('/details') && (
-                    <div className="right-section">
-                        <Outlet />
-                    </div>
-                )}
             </div>
 
             {totalPages > 1 && <Pagination />}

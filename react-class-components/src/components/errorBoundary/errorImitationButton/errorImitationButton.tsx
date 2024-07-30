@@ -1,4 +1,4 @@
-import './errorImitationButton.css';
+import styles from './errorImitationButton.module.css';
 
 interface ErrorImitationBtnProps {
     onclick: () => void;
@@ -6,7 +6,7 @@ interface ErrorImitationBtnProps {
 
 export default function ErrorImitationBtn({ onclick }: ErrorImitationBtnProps) {
     return (
-        <button className="error-btn" onClick={onclick}>
+        <button className={styles.errorBtn} onClick={onclick}>
             Generate Error
         </button>
     );

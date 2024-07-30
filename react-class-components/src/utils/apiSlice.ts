@@ -13,7 +13,7 @@ export const apiSlice = createApi({
                 itemsCount: response.count,
             }),
         }),
-        getCharacterByName: builder.query<SwapiPerson[], { name: string }>({
+        getCharacterByName: builder.query<SwapiPerson[], { name: string | string[] }>({
             query: ({ name }) => `people/?search=${name}`,
             transformResponse: (response: SwapiPeopleResponse): SwapiPerson[] => response.results,
         }),

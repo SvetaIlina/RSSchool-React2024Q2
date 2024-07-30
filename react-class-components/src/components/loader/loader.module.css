@@ -1,10 +1,10 @@
-.loader-wrapper {
+.loaderWrapper {
     position: absolute;
     top: 50%;
     right: 50%;
 }
 
-.details > .loader-wrapper {
+.details > .loaderWrapper {
     position: static;
 }
 
@@ -17,7 +17,7 @@
     position: relative;
 }
 
-.loader-inner {
+.loaderInner {
     width: 40px;
     height: 40px;
     border-radius: 50%;

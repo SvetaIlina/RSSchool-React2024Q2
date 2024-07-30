@@ -1,5 +1,6 @@
 import { ChangeEvent } from 'react';
-import './searchInput.css';
+import styles from './searchInput.module.css';
+import useTheme from '../../../hooks/useTheme';
 
 interface SearchInputProps {
     value: string;
@@ -9,10 +10,11 @@ export default function SearchInput({ value, onChange }: SearchInputProps) {
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         onChange(event.target.value);
     };
+    const { isDark } = useTheme();
 
     return (
         <input
-            className="search-input"
+            className={`${styles.searchInput} ${isDark ? styles.darkThemeInput : ''}`}
             type="text"
             value={value}
             onChange={handleInputChange}

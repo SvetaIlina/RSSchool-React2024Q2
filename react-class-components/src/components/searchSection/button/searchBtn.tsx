@@ -1,8 +1,10 @@
-import './searchBtn.css';
+import useTheme from '../../../hooks/useTheme';
+import styles from './searchBtn.module.css';
 
 export default function SearchButton() {
+    const { isDark } = useTheme();
     return (
-        <button className="search-btn" type="submit">
+        <button className={`${styles.searchBtn} ${isDark ? styles.darkThemeSearchBtn : ''}`} type="submit">
             Search
         </button>
     );

@@ -1,17 +1,15 @@
 import SearchInput from './input/searchInput';
 import SearchButton from './button/searchBtn';
-import './searchSection.css';
+import styles from './searchSection.module.css';
 import useSavedQuery from '../../hooks/useSavedQuery';
 import { setCurrentPageNumber } from '../../utils/currentPageSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setTerm } from '../../utils/searchTermSlice';
-import { useSearchParams } from 'react-router-dom';
 
 export default function SearchSection() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
-    const [, setSearchParams] = useSearchParams();
     const dispatch = useDispatch();
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -26,7 +24,6 @@ export default function SearchSection() {
         setSavedQuery(searchTerm);
         dispatch(setCurrentPageNumber(1));
         dispatch(setTerm(searchTerm));
-        setSearchParams({ page: '1' });
     };
 
     useEffect(() => {
@@ -36,7 +33,7 @@ export default function SearchSection() {
         }
     }, []);
     return (
-        <form className="search-section" onSubmit={onFormSubmit}>
+        <form className={styles.searchSection} onSubmit={onFormSubmit}>
             <SearchInput value={searchTerm} onChange={handleSearchTermChange} />
             <SearchButton />
         </form>

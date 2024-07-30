@@ -1,8 +1,8 @@
-.error-btn {
+.errorBtn {
     background: var(--accent);
     color: var(--reserveBg);
 }
-.wrapper.dark-theme .error-btn {
+.wrapper.dark-theme .errorBtn {
     background: var(--reserveBg);
     color: var(--accent);
 }
