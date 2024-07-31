@@ -30,22 +30,15 @@ export default function SearchSection() {
     useEffect(() => {
         if (savedQuery) {
             setSearchTerm(savedQuery);
-            router.push(
-                {
-                    pathname: router.pathname,
-                    query: { ...router.query, searchTerm: savedQuery },
-                },
-                undefined,
-                { shallow: false }
-            );
+            router.push({
+                pathname: router.pathname,
+                query: { ...router.query, searchTerm: savedQuery, page: 1 },
+            });
         } else {
-            router.push(
-                {
-                    pathname: router.pathname,
-                },
-                undefined,
-                { shallow: false }
-            );
+            router.push({
+                pathname: router.pathname,
+                query: { page: 1 },
+            });
         }
     }, [savedQuery]);
     return (
