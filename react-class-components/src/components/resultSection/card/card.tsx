@@ -17,7 +17,10 @@ export default function Card({ character }: CardProps) {
     const router = useRouter();
 
     const handleShowDetails = (name: string) => {
-        router.push(`/details/${name}`);
+        router.push({
+            pathname: router.pathname,
+            query: { ...router.query, details: name },
+        });
     };
 
     const handleCheckboxChange = () => {

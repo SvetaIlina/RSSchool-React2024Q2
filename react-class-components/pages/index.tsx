@@ -8,37 +8,23 @@ import useTheme from '../src/hooks/useTheme';
 import { useSelector } from 'react-redux';
 import { getTotalPage, setResults } from '../src/utils/currentPageSlice';
 import React from 'react';
-import { CharactersResponse } from '../src/types/type';
+import { CharactersResponse, SwapiPerson } from '../src/types/type';
 import { wrapper } from '../src/utils/store';
 import { apiSlice } from '../src/utils/apiSlice';
 import { GetServerSideProps } from 'next/types';
 import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
+import Details from '../src/components/details/details';
 
 interface MainPageProps {
     initialData: CharactersResponse;
+    initialDetailsData: SwapiPerson[];
 }
 
-export default function MainPage({ initialData }: MainPageProps) {
+export default function MainPage({ initialData, initialDetailsData }: MainPageProps) {
     const [errorCounter, setErrorCounter] = useState(0);
     const totalPages = useSelector(getTotalPage);
     const { isDark, toggleTheme } = useTheme();
     const dispatch = useDispatch();
-    const router = useRouter();
-    const { query } = router;
-
-    useEffect(() => {
-        if (!query.page) {
-            router.push(
-                {
-                    pathname: router.pathname,
-                    query: { ...query, page: 1 },
-                },
-                undefined,
-                { shallow: false }
-            );
-        }
-    }, [query.page, router]);
 
     useEffect(() => {
         if (initialData) {
@@ -66,6 +52,11 @@ export default function MainPage({ initialData }: MainPageProps) {
 
             <div className="result-section">
                 <ResultsSection initialData={initialData} />
+                {initialDetailsData.length !== 0 && (
+                    <div className="right-section">
+                        <Details initialDetailData={initialDetailsData} />
+                    </div>
+                )}
             </div>
 
             {totalPages > 1 && <Pagination />}
@@ -80,14 +71,25 @@ export default function MainPage({ initialData }: MainPageProps) {
 
 export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps((store) => async (context) => {
     const { query } = context;
-    const page = query.page ? parseInt(query.page as string, 10) : 1;
     const searchTerm = query.searchTerm || '';
+    const page = query.page ? parseInt(query.page as string, 10) : 1;
+    const details = Array.isArray(query.details) ? query.details[0] : query.details;
 
     const { data: initialData } = await store.dispatch(apiSlice.endpoints.getCharacters.initiate({ page, searchTerm }));
+
+    let initialDetailsData: SwapiPerson[] = [];
+
+    if (details) {
+        const { data } = await store.dispatch(apiSlice.endpoints.getCharacterByName.initiate({ name: details }));
+        if (data) {
+            initialDetailsData = data;
+        }
+    }
 
     return {
         props: {
             initialData,
+            initialDetailsData,
         },
     };
 });
