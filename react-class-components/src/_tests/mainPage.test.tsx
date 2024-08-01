@@ -1,14 +1,46 @@
+import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next/types';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
-import MainPage from '../pages/main/mainPage';
+import MainPage, { MainPageProps } from '../../pages/index';
 import { ThemeProvider } from '../context/context';
 import { configureStore } from '@reduxjs/toolkit';
+import { SwapiPerson } from '../types/type';
+import { mockCharactersResponse, mockSearchResults } from './mockData';
 import { apiSlice } from '../utils/apiSlice';
 import selectedItemReducer from '../utils/selectedItemlSlice';
 import currentPageReducer from '../utils/currentPageSlice';
 import searchTermReduser from '../utils/searchTermSlice';
+import { useRouter } from 'next/router';
+
+const mockGetServerSideProps = vi
+    .fn()
+    .mockImplementation((context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<MainPageProps>> => {
+        const { query } = context;
+
+        const initialData = mockCharactersResponse;
+        let initialDetailsData: SwapiPerson[] = [];
+
+        if (query.details === 'Luke+Skywalker') {
+            initialDetailsData = mockSearchResults;
+        }
+
+        return Promise.resolve({
+            props: {
+                initialData,
+                initialDetailsData,
+            },
+        });
+    });
+
+vi.mock('../../pages/index', async (importOriginal) => {
+    const actual = await importOriginal<typeof import('../../pages/index')>();
+    return {
+        ...actual,
+        getServerSideProps: vi.fn(),
+    };
+});
 
 let store = configureStore({
     reducer: {
@@ -36,13 +68,18 @@ beforeEach(() => {
 
 describe('Main Page', () => {
     it('when at least 1 item has been selected, the flyout element should appear', async () => {
+        const push = vi.fn();
+
+        (useRouter as Mock).mockImplementation(() => ({
+            push,
+        }));
+        const context = { query: { page: '2' } };
+        const { props } = await mockGetServerSideProps(context);
         render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <ThemeProvider>
-                        <MainPage />
-                    </ThemeProvider>
-                </MemoryRouter>
+                <ThemeProvider>
+                    <MainPage {...props} />
+                </ThemeProvider>
             </Provider>
         );
         await waitFor(() => {
@@ -53,13 +90,16 @@ describe('Main Page', () => {
         });
     });
     it('toggles theme on button click', () => {
+        const push = vi.fn();
+
+        (useRouter as Mock).mockImplementation(() => ({
+            push,
+        }));
         const { container } = render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <ThemeProvider>
-                        <MainPage />
-                    </ThemeProvider>
-                </MemoryRouter>
+                <ThemeProvider>
+                    <MainPage initialData={mockCharactersResponse} initialDetailsData={mockSearchResults} />
+                </ThemeProvider>
             </Provider>
         );
         const wrapper = container.querySelector('.wrapper');

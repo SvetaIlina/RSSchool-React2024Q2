@@ -1,5 +1,6 @@
 import { SwapiPerson } from '../../../types/type';
 import styles from './detailCard.module.css';
+import React from 'react';
 interface CardProps {
     character: SwapiPerson;
 }

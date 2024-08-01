@@ -1,5 +1,4 @@
-import { vi } from 'vitest';
-import { SwapiPeopleResponse, SwapiPerson } from '../types/type';
+import { CharactersResponse, SwapiPeopleResponse, SwapiPerson } from '../types/type';
 
 export const mockResults: SwapiPeopleResponse = {
     count: 2,
@@ -84,12 +83,7 @@ export const emptyMockResults: SwapiPeopleResponse = {
     results: [],
 };
 
-export const mockNavigate = vi.fn();
-
-vi.mock('react-router-dom', async (importOriginal) => {
-    const actual = await importOriginal<typeof import('react-router-dom')>();
-    return {
-        ...actual,
-        useNavigate: () => mockNavigate,
-    };
-});
+export const mockCharactersResponse: CharactersResponse = {
+    results: mockResults.results,
+    itemsCount: 2,
+};

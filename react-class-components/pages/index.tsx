@@ -15,7 +15,7 @@ import { GetServerSideProps } from 'next/types';
 import { useDispatch } from 'react-redux';
 import Details from '../src/components/details/details';
 
-interface MainPageProps {
+export interface MainPageProps {
     initialData: CharactersResponse;
     initialDetailsData: SwapiPerson[];
 }

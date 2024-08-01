@@ -1,6 +1,7 @@
 import { convertToCSV } from '../../../services/services';
 import { SwapiPerson } from '../../../types/type';
 import styles from './downloadLink.module.css';
+import React from 'react';
 
 interface DownloadLinkProps {
     items: SwapiPerson[];

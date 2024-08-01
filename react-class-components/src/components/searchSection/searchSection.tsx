@@ -6,6 +6,7 @@ import { setCurrentPageNumber } from '../../utils/currentPageSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 export default function SearchSection() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');

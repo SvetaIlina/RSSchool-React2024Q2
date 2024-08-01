@@ -2,7 +2,7 @@ import styles from './resultSection.module.css';
 import Card from './card/card';
 import useTheme from '../../hooks/useTheme';
 import { CharactersResponse } from '../../types/type';
-
+import React from 'react';
 interface ResultsSectionProps {
     initialData: CharactersResponse;
 }

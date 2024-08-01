@@ -1,7 +1,7 @@
 import { ChangeEvent } from 'react';
 import styles from './searchInput.module.css';
 import useTheme from '../../../hooks/useTheme';
-
+import React from 'react';
 interface SearchInputProps {
     value: string;
     onChange: (value: string) => void;

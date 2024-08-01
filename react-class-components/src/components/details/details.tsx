@@ -19,12 +19,13 @@ export default function Details({ initialDetailData }: DetailProps) {
             <button
                 className={styles.closeDetail}
                 onClick={() => {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    const { details, ...restQuery } = router.query;
+                    const query = router.query
+                        ? Object.fromEntries(Object.entries(router.query).filter(([key]) => key !== 'details'))
+                        : {};
 
                     router.push({
                         pathname: router.pathname,
-                        query: restQuery,
+                        query,
                     });
                 }}
             >

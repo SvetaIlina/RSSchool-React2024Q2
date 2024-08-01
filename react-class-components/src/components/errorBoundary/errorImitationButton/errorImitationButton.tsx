@@ -1,5 +1,5 @@
 import styles from './errorImitationButton.module.css';
-
+import React from 'react';
 interface ErrorImitationBtnProps {
     onclick: () => void;
 }
