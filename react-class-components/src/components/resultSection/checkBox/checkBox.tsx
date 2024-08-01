@@ -1,5 +1,5 @@
 import styles from './checkBox.module.css';
-
+import React from 'react';
 interface SelectCheckBoxProps {
     isSelected: boolean;
     handleChange: () => void;

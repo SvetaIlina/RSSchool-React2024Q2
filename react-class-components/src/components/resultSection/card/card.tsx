@@ -5,6 +5,7 @@ import { getSelectedItemsDetails, toggleItemSelection } from '../../../utils/sel
 import SelectCheckBox from '../checkBox/checkBox';
 import useTheme from '../../../hooks/useTheme';
 import { useRouter } from 'next/router';
+import React from 'react';
 
 interface CardProps {
     character: SwapiPerson;
