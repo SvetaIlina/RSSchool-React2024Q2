@@ -1,14 +1,13 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { Provider } from 'react-redux';
-
 import { configureStore } from '@reduxjs/toolkit';
-
 import selectedItemReducer, { SelectedItemsState } from '../utils/selectedItemlSlice';
-
 import Flyout from '../components/flyout/flyout';
 import { mockResults } from './mockData';
 import { convertToCSV } from '../services/services';
+import React from 'react';
+import { ThemeProvider } from '../context/context';
 
 const preloadedState: { selectedItem: SelectedItemsState } = {
     selectedItem: {
@@ -37,7 +36,9 @@ describe('Flyout Component', () => {
     it('should contain number of selected elements', () => {
         render(
             <Provider store={store}>
-                <Flyout />
+                <ThemeProvider>
+                    <Flyout />
+                </ThemeProvider>
             </Provider>
         );
 
@@ -46,7 +47,9 @@ describe('Flyout Component', () => {
     it('When "Unselect all" button is clicked, all the selected items should be unselected and the flyout should be removed from the page', () => {
         render(
             <Provider store={store}>
-                <Flyout />
+                <ThemeProvider>
+                    <Flyout />
+                </ThemeProvider>
             </Provider>
         );
         const unselectBtn = screen.getByText('Unselect all');
@@ -57,7 +60,9 @@ describe('Flyout Component', () => {
     it('When "Download" button is clicked, the list of selected items should save to the .csv file, name should contain the number of selected items', () => {
         render(
             <Provider store={store}>
-                <Flyout />
+                <ThemeProvider>
+                    <Flyout />
+                </ThemeProvider>
             </Provider>
         );
         const downloadLink = screen.getByText('Download');
