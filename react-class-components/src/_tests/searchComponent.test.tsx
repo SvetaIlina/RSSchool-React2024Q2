@@ -1,26 +1,30 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, Mock, vi } from 'vitest';
 import SearchSection from '../components/searchSection/searchSection';
-import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import currentPageReducer from '../utils/currentPageSlice';
-import searchTermReduser from '../utils/searchTermSlice';
-
+import React from 'react';
+import { ThemeProvider } from '../context/context';
+import { useRouter } from 'next/router';
 const store = configureStore({
     reducer: {
         currentPage: currentPageReducer,
-        searchTerm: searchTermReduser,
     },
 });
 
 describe('DetailPage Component', () => {
     it('clicking the Search button saves the entered value to the local storage', () => {
+        const push = vi.fn();
+
+        (useRouter as Mock).mockImplementation(() => ({
+            push,
+        }));
         render(
             <Provider store={store}>
-                <MemoryRouter>
+                <ThemeProvider>
                     <SearchSection />
-                </MemoryRouter>
+                </ThemeProvider>
             </Provider>
         );
 
@@ -28,14 +32,19 @@ describe('DetailPage Component', () => {
         const searcBtn = screen.getByText('Search');
         fireEvent.change(input, { target: { value: 'test query' } });
         fireEvent.click(searcBtn);
-        expect(store.getState().searchTerm.searchTerm).toBe('test query');
+        expect(localStorage.getItem('searchTerm')).toBe('"test query"');
     });
     it('component retrieves the value from the local storage upon mounting', () => {
+        const push = vi.fn();
+
+        (useRouter as Mock).mockImplementation(() => ({
+            push,
+        }));
         render(
             <Provider store={store}>
-                <MemoryRouter>
+                <ThemeProvider>
                     <SearchSection />
-                </MemoryRouter>
+                </ThemeProvider>
             </Provider>
         );
         const input: HTMLInputElement = screen.getByRole('textbox');
