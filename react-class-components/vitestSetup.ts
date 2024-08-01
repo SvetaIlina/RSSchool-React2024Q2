@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
-import { emptyMockResults, mockResults, mockSearchResults } from './_tests/mockData';
+import { emptyMockResults, mockResults, mockSearchResults } from './src/_tests/mockData';
 import { beforeAll, afterEach, afterAll, vi } from 'vitest';
 
 const handlers = [
@@ -32,4 +32,10 @@ beforeAll(() => {
 
 afterAll(() => {
     vi.restoreAllMocks();
+});
+
+beforeAll(() => {
+    vi.mock('next/router', () => ({
+        useRouter: vi.fn(),
+    }));
 });

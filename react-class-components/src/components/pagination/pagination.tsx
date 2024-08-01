@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { getCurrentPage, getTotalPage, setCurrentPageNumber } from '../../utils/currentPageSlice';
 import styles from './pagination.module.css';

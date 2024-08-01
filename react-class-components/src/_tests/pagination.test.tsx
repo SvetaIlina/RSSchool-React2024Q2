@@ -1,11 +1,11 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
-import { MemoryRouter } from 'react-router-dom';
+import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import Pagination from '../components/pagination/pagination';
 import currentPageReducer, { currentPageState } from '../utils/currentPageSlice';
-import { mockNavigate } from './mockData';
+import React from 'react';
+import { useRouter } from 'next/router';
 
 const preloadedState: { currentPage: currentPageState } = {
     currentPage: {
@@ -32,39 +32,47 @@ beforeEach(() => {
 });
 
 describe('Pagination Component', () => {
-    beforeEach(() => {
-        mockNavigate.mockClear();
-    });
-
     it('should updates URL query parameter when page changes', async () => {
+        const push = vi.fn();
+
+        (useRouter as Mock).mockImplementation(() => ({
+            push,
+        }));
+
         render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <Pagination />
-                </MemoryRouter>
+                <Pagination />
             </Provider>
         );
 
         fireEvent.click(screen.getByText('Next'));
 
         await waitFor(() => {
-            expect(mockNavigate).toHaveBeenCalledWith('/?page=4');
+            expect(push).toHaveBeenCalledWith({
+                query: { page: 4 },
+            });
             expect(store.getState().currentPage.currentPage).toBe(4);
         });
     });
     it('should updates URL query parameter when page changes', async () => {
+        const push = vi.fn();
+
+        (useRouter as Mock).mockImplementation(() => ({
+            push,
+        }));
+
         render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <Pagination />
-                </MemoryRouter>
+                <Pagination />
             </Provider>
         );
 
         fireEvent.click(screen.getByText('Previous'));
 
         await waitFor(() => {
-            expect(mockNavigate).toHaveBeenCalledWith('/?page=2');
+            expect(push).toHaveBeenCalledWith({
+                query: { page: 2 },
+            });
             expect(store.getState().currentPage.currentPage).toBe(2);
         });
     });
@@ -72,9 +80,7 @@ describe('Pagination Component', () => {
     it('renders with correct current page and total pages', () => {
         render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <Pagination />
-                </MemoryRouter>
+                <Pagination />
             </Provider>
         );
 
@@ -86,9 +92,7 @@ describe('Pagination Component', () => {
     it('disables Previous button on the first page', () => {
         render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <Pagination />
-                </MemoryRouter>
+                <Pagination />
             </Provider>
         );
 
@@ -102,9 +106,7 @@ describe('Pagination Component', () => {
     it('disables Next button on the last page', () => {
         render(
             <Provider store={store}>
-                <MemoryRouter>
-                    <Pagination />
-                </MemoryRouter>
+                <Pagination />
             </Provider>
         );
 
