@@ -87,3 +87,7 @@ export const mockCharactersResponse: CharactersResponse = {
     results: mockResults.results,
     itemsCount: 2,
 };
+export const mockEmptyCharactersResponse: CharactersResponse = {
+    results: [],
+    itemsCount: 0,
+};
