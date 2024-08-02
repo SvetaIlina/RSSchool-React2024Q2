@@ -1,0 +1,8 @@
+.toggleThemeBtn {
+    right: 2rem;
+    background-color: var(--reserveBg);
+}
+
+.toggleThemeBtnDark {
+    background-color: var(--background-darkTheme);
+}

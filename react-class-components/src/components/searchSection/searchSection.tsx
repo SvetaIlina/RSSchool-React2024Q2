@@ -2,17 +2,17 @@ import SearchInput from './input/searchInput';
 import SearchButton from './button/searchBtn';
 import styles from './searchSection.module.css';
 import useSavedQuery from '../../hooks/useSavedQuery';
-import { setCurrentPageNumber } from '../../utils/currentPageSlice';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import useCreateQueryString from '../../hooks/useCreateQueryString';
 
 export default function SearchSection() {
     const [savedQuery, setSavedQuery] = useSavedQuery<string>('searchTerm');
     const [searchTerm, setSearchTerm] = useState('');
-    const dispatch = useDispatch();
     const router = useRouter();
+    const pathname = usePathname();
+    const createQueryString = useCreateQueryString();
 
     const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -25,21 +25,14 @@ export default function SearchSection() {
 
     const handleSearchBtnClick = () => {
         setSavedQuery(searchTerm);
-        dispatch(setCurrentPageNumber(1));
     };
 
     useEffect(() => {
         if (savedQuery) {
             setSearchTerm(savedQuery);
-            router.push({
-                pathname: router.pathname,
-                query: { ...router.query, searchTerm: savedQuery, page: 1 },
-            });
+            router.push(`${pathname}?${createQueryString('page', '1')}&${createQueryString('searchTerm', savedQuery)}`);
         } else {
-            router.push({
-                pathname: router.pathname,
-                query: { page: 1 },
-            });
+            router.push(`${pathname}?${createQueryString('page', '1')}`);
         }
     }, [savedQuery]);
     return (

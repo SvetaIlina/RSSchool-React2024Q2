@@ -47,6 +47,10 @@ body {
     color: var(--text);
 }
 
+.isDark {
+    background: #123c69;
+}
+
 #__next {
     width: 100%;
     min-height: 100%;
@@ -71,15 +75,6 @@ body {
     top: 2rem;
     padding: 4px 8px;
     font-size: 1.2rem;
-}
-
-.toggle-theme-btn {
-    right: 2rem;
-    background-color: var(--reserveBg);
-}
-
-.wrapper.dark-theme > .toggle-theme-btn {
-    background-color: var(--background-darkTheme);
 }
 
 .result-section {

@@ -4,8 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSelectedItemsDetails, toggleItemSelection } from '../../../utils/selectedItemlSlice';
 import SelectCheckBox from '../checkBox/checkBox';
 import useTheme from '../../../hooks/useTheme';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
+import useCreateQueryString from '../../../hooks/useCreateQueryString';
 
 interface CardProps {
     character: SwapiPerson;
@@ -16,12 +17,11 @@ export default function Card({ character }: CardProps) {
     const selectedItems = useSelector(getSelectedItemsDetails);
     const { isDark } = useTheme();
     const router = useRouter();
+    const pathname = usePathname();
+    const createQueryString = useCreateQueryString();
 
     const handleShowDetails = (name: string) => {
-        router.push({
-            pathname: router.pathname,
-            query: { ...router.query, details: name },
-        });
+        router.push(`${pathname}?${createQueryString('details', name)}`);
     };
 
     const handleCheckboxChange = () => {

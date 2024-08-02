@@ -1,28 +1,26 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { getCurrentPage, getTotalPage, setCurrentPageNumber } from '../../utils/currentPageSlice';
 import styles from './pagination.module.css';
-import { useDispatch } from 'react-redux';
-import { useRouter } from 'next/router';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import useCreateQueryString from '../../hooks/useCreateQueryString';
 
-export default function Pagination() {
-    const currentPage = useSelector(getCurrentPage);
-    const totalPages = useSelector(getTotalPage);
-    const dispatch = useDispatch();
+export interface PaginationProps {
+    totalPages: number;
+}
+
+export default function Pagination({ totalPages }: PaginationProps) {
+    const pathname = usePathname();
     const router = useRouter();
-    const { query } = router;
+    const searchParams = useSearchParams();
+    const currentPage = Number(searchParams.get('page')) || 1;
+    const createQueryString = useCreateQueryString();
 
     const updateQueryParams = (page: number) => {
-        router.push({
-            pathname: router.pathname,
-            query: { ...query, page: page },
-        });
+        router.push(`${pathname}?${createQueryString('page', page.toString())}`);
     };
 
     const handlePrevious = () => {
         if (currentPage > 1) {
             const page = currentPage - 1;
-            dispatch(setCurrentPageNumber(page));
             updateQueryParams(page);
         }
     };
@@ -30,7 +28,6 @@ export default function Pagination() {
     const handleNext = () => {
         if (currentPage < totalPages) {
             const page = currentPage + 1;
-            dispatch(setCurrentPageNumber(page));
             updateQueryParams(page);
         }
     };
