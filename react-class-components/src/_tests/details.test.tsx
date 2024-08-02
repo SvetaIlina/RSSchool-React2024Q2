@@ -5,7 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { apiSlice } from '../utils/apiSlice';
 import currentPageReducer from '../utils/currentPageSlice';
 import Details from '../components/details/details';
-import { mockSearchResults } from './mockData';
+import { mockSearchResultsLuke } from './mockData';
 import React from 'react';
 import { useRouter } from 'next/router';
 
@@ -33,7 +33,7 @@ describe('DetailPage Component', () => {
     it('should render detail page with correct character information', async () => {
         render(
             <Provider store={store}>
-                <Details initialDetailData={mockSearchResults} />
+                <Details initialDetailData={mockSearchResultsLuke} />
             </Provider>
         );
 
@@ -57,7 +57,7 @@ describe('DetailPage Component', () => {
         }));
         render(
             <Provider store={store}>
-                <Details initialDetailData={mockSearchResults} />
+                <Details initialDetailData={mockSearchResultsLuke} />
             </Provider>
         );
 
