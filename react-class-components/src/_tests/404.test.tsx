@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect } from 'vitest';
-import NotFoundPage from '../../pages/404';
 import React from 'react';
+import NotFoundPage from '../app/not-found';
 
 describe('Flyout Component', () => {
     it('renders the not found page correctly', () => {
