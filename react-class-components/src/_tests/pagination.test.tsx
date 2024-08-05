@@ -1,100 +1,58 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi, Mock } from 'vitest';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { describe, it, expect, vi, Mock } from 'vitest';
 import Pagination from '../components/pagination/pagination';
-import currentPageReducer, { currentPageState } from '../utils/currentPageSlice';
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
-const preloadedState: { currentPage: currentPageState } = {
-    currentPage: {
-        currentPage: 3,
-        totalPage: 5,
-        results: [],
-    },
-};
+const push = vi.fn();
 
-let store = configureStore({
-    reducer: {
-        currentPage: currentPageReducer,
-    },
-    preloadedState,
-});
+(useRouter as Mock).mockImplementation(() => ({
+    push,
+}));
+(usePathname as Mock).mockReturnValue('/');
 
-beforeEach(() => {
-    store = configureStore({
-        reducer: {
-            currentPage: currentPageReducer,
-        },
-        preloadedState,
-    });
-});
+const mockSearchParams = new URLSearchParams();
 
 describe('Pagination Component', () => {
     it('should updates URL query parameter when page changes', async () => {
-        const push = vi.fn();
+        mockSearchParams.set('page', '1');
+        (useSearchParams as Mock).mockReturnValue(mockSearchParams);
 
-        (useRouter as Mock).mockImplementation(() => ({
-            push,
-        }));
-
-        render(
-            <Provider store={store}>
-                <Pagination />
-            </Provider>
-        );
+        render(<Pagination totalPages={5} />);
 
         fireEvent.click(screen.getByText('Next'));
 
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith({
-                query: { page: 4 },
-            });
-            expect(store.getState().currentPage.currentPage).toBe(4);
+            expect(push).toHaveBeenCalledWith('/?page=2');
         });
     });
     it('should updates URL query parameter when page changes', async () => {
-        const push = vi.fn();
+        mockSearchParams.set('page', '2');
+        (useSearchParams as Mock).mockReturnValue(mockSearchParams);
 
-        (useRouter as Mock).mockImplementation(() => ({
-            push,
-        }));
-
-        render(
-            <Provider store={store}>
-                <Pagination />
-            </Provider>
-        );
+        render(<Pagination totalPages={5} />);
 
         fireEvent.click(screen.getByText('Previous'));
 
         await waitFor(() => {
-            expect(push).toHaveBeenCalledWith({
-                query: { page: 2 },
-            });
-            expect(store.getState().currentPage.currentPage).toBe(2);
+            expect(push).toHaveBeenCalledWith('/?page=1');
         });
     });
 
     it('renders with correct current page and total pages', () => {
-        render(
-            <Provider store={store}>
-                <Pagination />
-            </Provider>
-        );
+        mockSearchParams.set('page', '1');
+        (useSearchParams as Mock).mockReturnValue(mockSearchParams);
+        render(<Pagination totalPages={5} />);
 
-        expect(screen.getByText('Page 3 of 5')).toBeInTheDocument();
+        expect(screen.getByText('Page 1 of 5')).toBeInTheDocument();
         expect(screen.getByText('Previous')).toBeInTheDocument();
         expect(screen.getByText('Next')).toBeInTheDocument();
     });
 
     it('disables Previous button on the first page', () => {
-        render(
-            <Provider store={store}>
-                <Pagination />
-            </Provider>
-        );
+        mockSearchParams.set('page', '1');
+        (useSearchParams as Mock).mockReturnValue(mockSearchParams);
+        render(<Pagination totalPages={5} />);
 
         const previousButton = screen.getByText('Previous');
         for (let i = 0; i < 2; i++) {
@@ -104,11 +62,9 @@ describe('Pagination Component', () => {
     });
 
     it('disables Next button on the last page', () => {
-        render(
-            <Provider store={store}>
-                <Pagination />
-            </Provider>
-        );
+        mockSearchParams.set('page', '5');
+        (useSearchParams as Mock).mockReturnValue(mockSearchParams);
+        render(<Pagination totalPages={5} />);
 
         const nextButton = screen.getByText('Next');
         for (let i = 0; i < 2; i++) {

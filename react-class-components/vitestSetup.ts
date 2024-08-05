@@ -38,7 +38,9 @@ afterAll(() => {
 });
 
 beforeAll(() => {
-    vi.mock('next/router', () => ({
+    vi.mock('next/navigation', () => ({
         useRouter: vi.fn(),
+        usePathname: vi.fn(),
+        useSearchParams: vi.fn(),
     }));
 });
