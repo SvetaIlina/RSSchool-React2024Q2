@@ -15,7 +15,7 @@ export default function Pagination({ totalPages }: PaginationProps) {
     const createQueryString = useCreateQueryString();
 
     const updateQueryParams = (page: number) => {
-        router.push(`${pathname}?${createQueryString('page', page.toString())}`);
+        router.push(`${pathname}?${createQueryString([{ name: 'page', value: page.toString(), removal: false }])}`);
     };
 
     const handlePrevious = () => {

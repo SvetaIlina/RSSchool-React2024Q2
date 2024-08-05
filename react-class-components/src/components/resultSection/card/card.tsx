@@ -21,7 +21,7 @@ export default function Card({ character }: CardProps) {
     const createQueryString = useCreateQueryString();
 
     const handleShowDetails = (name: string) => {
-        router.push(`${pathname}?${createQueryString('details', name)}`);
+        router.push(`${pathname}?${createQueryString([{ name: 'details', value: name }])}`);
     };
 
     const handleCheckboxChange = () => {

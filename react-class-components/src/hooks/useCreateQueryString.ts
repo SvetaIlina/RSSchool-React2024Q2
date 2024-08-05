@@ -1,18 +1,30 @@
 import { useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 
+interface Query {
+    name: string;
+    value: string;
+    removal: boolean;
+}
+
 const useCreateQueryString = () => {
     const searchParams = useSearchParams();
 
     const createQueryString = useCallback(
-        (name: string, value: string) => {
-            if (searchParams.get(name) !== value) {
-                const params = new URLSearchParams(searchParams.toString());
-                params.set(name, value);
-                return params.toString();
-            } else {
-                return '';
-            }
+        (queries: Query[]) => {
+            const params = new URLSearchParams(searchParams.toString());
+
+            queries.forEach((query) => {
+                if (searchParams.has(query.name)) {
+                    params.delete(query.name);
+                    if (!query.removal) {
+                        params.set(query.name, query.value);
+                    }
+                } else {
+                    params.set(query.name, query.value);
+                }
+            });
+            return params.toString();
         },
         [searchParams]
     );

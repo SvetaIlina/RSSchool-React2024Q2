@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import DetailCard from '../resultSection/detailCard/detailCard';
 import { SwapiPerson } from '../../types/type';
 import styles from './detail.module.css';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import useCreateQueryString from '../../hooks/useCreateQueryString';
 
 interface DetailProps {
     initialDetailData: SwapiPerson[];
@@ -11,18 +12,7 @@ interface DetailProps {
 export default function Details({ initialDetailData }: DetailProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const searchParams = useSearchParams();
-
-    const deleteQueryString = useCallback(
-        (name: string) => {
-            if (searchParams.has(name)) {
-                const params = new URLSearchParams(searchParams.toString());
-                params.delete(name);
-                return params.toString();
-            }
-        },
-        [searchParams]
-    );
+    const createQueryString = useCreateQueryString();
 
     return (
         <div className={styles.details}>
@@ -33,7 +23,7 @@ export default function Details({ initialDetailData }: DetailProps) {
             <button
                 className={styles.closeDetail}
                 onClick={() => {
-                    router.push(`${pathname}?${deleteQueryString('details')}`);
+                    router.push(`${pathname}?${createQueryString([{ name: 'details', value: '', removal: true }])}`);
                 }}
             >
                 &times;

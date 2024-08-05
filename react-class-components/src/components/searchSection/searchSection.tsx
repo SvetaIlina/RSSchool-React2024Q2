@@ -30,9 +30,19 @@ export default function SearchSection() {
     useEffect(() => {
         if (savedQuery) {
             setSearchTerm(savedQuery);
-            router.push(`${pathname}?${createQueryString('page', '1')}&${createQueryString('searchTerm', savedQuery)}`);
+            router.push(
+                `${pathname}?${createQueryString([
+                    { name: 'searchTerm', value: searchTerm, removal: false },
+                    { name: 'page', value: '1', removal: false },
+                ])}`
+            );
         } else {
-            router.push(`${pathname}?${createQueryString('page', '1')}`);
+            router.push(
+                `${pathname}?${createQueryString([
+                    { name: 'searchTerm', value: searchTerm, removal: true },
+                    { name: 'page', value: '1', removal: false },
+                ])}`
+            );
         }
     }, [savedQuery]);
     return (
