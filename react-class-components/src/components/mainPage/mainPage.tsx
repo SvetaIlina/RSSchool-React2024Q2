@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-// import useTheme from '../../hooks/useTheme';
 import Details from '../details/details';
 import ErrorImitationBtn from '../errorBoundary/errorImitationButton/errorImitationButton';
 import Flyout from '../flyout/flyout';
@@ -13,6 +12,7 @@ import { ThemeProvider } from '../../context/context';
 import { Provider } from 'react-redux';
 import { store } from '../../utils/store';
 import ToggleBtn from '../toggleBtn/toggleBtn';
+import React from 'react';
 
 export interface MainPageProps {
     initialData: SwapiPerson[];

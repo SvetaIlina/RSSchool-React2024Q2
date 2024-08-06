@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import selectedItemReducer from '../utils/selectedItemlSlice';
-import { mockCharactersResponse, mockEmptyCharactersResponse } from './mockData';
+import { mockResults } from './mockData';
 import React from 'react';
 import { ThemeProvider } from '../context/context';
 
@@ -19,7 +19,7 @@ describe('ResulSection Component', () => {
         render(
             <Provider store={store}>
                 <ThemeProvider>
-                    <ResultsSection initialData={mockCharactersResponse} />
+                    <ResultsSection initialData={mockResults.results} />
                 </ThemeProvider>
             </Provider>
         );
@@ -32,7 +32,7 @@ describe('ResulSection Component', () => {
         render(
             <Provider store={store}>
                 <ThemeProvider>
-                    <ResultsSection initialData={mockEmptyCharactersResponse} />
+                    <ResultsSection initialData={[]} />
                 </ThemeProvider>
             </Provider>
         );
