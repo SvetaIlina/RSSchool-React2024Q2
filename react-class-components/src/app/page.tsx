@@ -2,6 +2,7 @@ import MainPage from '../components/mainPage/mainPage';
 import { PageCount } from '../types/enums';
 import { SwapiPeopleResponse, SwapiPerson } from '../types/type';
 import fetchData from '../utils/swapi';
+import React from 'react';
 
 export interface PageParams {
     searchParams: { searchTerm?: string; page?: string; details?: string };

@@ -4,6 +4,7 @@ import { describe, it, expect, vi, Mock } from 'vitest';
 import { mockResults, mockSearchResultsLuke } from './mockData';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import MainPage from '../components/mainPage/mainPage';
+import Page from '../app/page';
 
 const push = vi.fn();
 
@@ -51,5 +52,23 @@ describe('Main Page', () => {
         fireEvent.click(closeBtn);
         rerender(<MainPage initialData={mockResults.results} initialDetailData={[]} totalPages={5} />);
         expect(closeBtn).not.toBeInTheDocument();
+    });
+
+    it('should render MainPage with the correct data', async () => {
+        const props = {
+            searchParams: { searchTerm: 'Luke', page: '1', details: 'Darth Vader' },
+        };
+
+        const Result = await Page(props);
+        render(Result);
+
+        await waitFor(() => {
+            expect(screen.getByText('Luke Skywalker')).toBeInTheDocument();
+            expect(
+                screen.getByText(
+                    'Darth Vader is 202 cm tall, weighs 136 kg, has none hair, white skin, and yellow eyes.'
+                )
+            ).toBeInTheDocument();
+        });
     });
 });

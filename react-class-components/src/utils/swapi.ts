@@ -1,6 +1,6 @@
 import { SwapiPeopleResponse } from '../types/type';
 
-const BASE_URL = 'https://swapi.dev/api';
+export const BASE_URL = 'https://swapi.dev/api';
 
 const fetchData = async (searchTerm: string = '', page: string = '1'): Promise<SwapiPeopleResponse> => {
     let url = `${BASE_URL}/people/`;
