@@ -74,13 +74,15 @@ export function ErrorBoundary() {
                 <Links />
             </head>
             <body>
-                {isRouteErrorResponse(error) ? (
-                    <NotFoundPage />
-                ) : error instanceof Error ? (
-                    <ErrorMessage text={error.message} />
-                ) : (
-                    <ErrorMessage text={'Unknown Error'} />
-                )}
+                <div className="error-container">
+                    {isRouteErrorResponse(error) ? (
+                        <NotFoundPage />
+                    ) : error instanceof Error ? (
+                        <ErrorMessage text={error.message} />
+                    ) : (
+                        <ErrorMessage text={'Unknown Error'} />
+                    )}
+                </div>
 
                 <Scripts />
             </body>

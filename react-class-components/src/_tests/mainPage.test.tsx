@@ -1,36 +1,40 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, Mock, vi } from 'vitest';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
-import MainPage from '../pages/main/mainPage';
 import { ThemeProvider } from '../context/context';
 import { configureStore } from '@reduxjs/toolkit';
-import { apiSlice } from '../utils/apiSlice';
 import selectedItemReducer from '../utils/selectedItemlSlice';
-import currentPageReducer from '../utils/currentPageSlice';
-import searchTermReduser from '../utils/searchTermSlice';
+import MainPage from 'src/components/main/mainPage';
+import { mockResults } from './mockData';
+import { useLocation, useNavigation } from '@remix-run/react';
 
 let store = configureStore({
     reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
-        currentPage: currentPageReducer,
         selectedItem: selectedItemReducer,
-        searchTerm: searchTermReduser,
     },
-
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
 });
+const mockNavigate = vi.fn();
+vi.mock('@remix-run/react', () => ({
+    useLocation: vi.fn(),
+    useNavigation: vi.fn(),
+    NavLink: vi.fn(),
+    useNavigate: () => mockNavigate,
+}));
 
 beforeEach(() => {
     store = configureStore({
         reducer: {
-            [apiSlice.reducerPath]: apiSlice.reducer,
-            currentPage: currentPageReducer,
             selectedItem: selectedItemReducer,
-            searchTerm: searchTermReduser,
         },
-
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
+    });
+    (useLocation as Mock).mockReturnValue({
+        pathname: '/',
+        search: '?page=1',
+    });
+    (useNavigation as Mock).mockReturnValue({
+        state: 'idle',
+        location: null,
     });
 });
 
@@ -40,7 +44,7 @@ describe('Main Page', () => {
             <Provider store={store}>
                 <MemoryRouter>
                     <ThemeProvider>
-                        <MainPage />
+                        <MainPage searchResult={mockResults} totalPages={1} />
                     </ThemeProvider>
                 </MemoryRouter>
             </Provider>
@@ -57,7 +61,7 @@ describe('Main Page', () => {
             <Provider store={store}>
                 <MemoryRouter>
                     <ThemeProvider>
-                        <MainPage />
+                        <MainPage searchResult={mockResults} totalPages={1} />
                     </ThemeProvider>
                 </MemoryRouter>
             </Provider>
