@@ -1,21 +1,14 @@
 import { SwapiPeopleResponse } from '../types/type';
 
-const BASE_URL = 'https://swapi.dev/api';
+export const BASE_URL = 'https://swapi.dev/api';
 
-const fetchData = async (searchTerm: string, page?: number): Promise<SwapiPeopleResponse> => {
+const fetchData = async (searchTerm: string = '', page: string = '1'): Promise<SwapiPeopleResponse> => {
     let url = `${BASE_URL}/people/`;
 
-    const params = new URLSearchParams();
-    if (searchTerm.trim() !== '') {
-        params.append('search', searchTerm.trim());
-    }
-    if (page) {
-        params.append('page', page.toString());
-    }
+    searchTerm ? (url += `?search=${searchTerm}&page=${page}`) : (url += `?page=${page}`);
 
-    url += `?${params.toString()}`;
     try {
-        const response = await fetch(url);
+        const response = await fetch(url, { cache: 'no-store' });
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }

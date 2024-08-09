@@ -1,34 +1,25 @@
-import { useSelector } from 'react-redux';
-import { getCurrentPage, getTotalPage, setCurrentPageNumber } from '../../utils/currentPageSlice';
+import { useSearchParams } from '@remix-run/react';
 import './pagination.css';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
 
-export default function Pagination() {
-    const currentPage = useSelector(getCurrentPage);
-    const totalPages = useSelector(getTotalPage);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [newSearch, setNewSearch] = useState('');
-    const newURL = `${location.pathname}${newSearch}${location.hash}`;
+interface PaginationProps {
+    pages: number;
+}
 
-    useEffect(() => navigate(`${newURL}`), [newURL]);
+export default function Pagination({ pages }: PaginationProps) {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = Number(searchParams.get('page')) || 1;
 
     const handlePrevious = () => {
         if (currentPage > 1) {
             const page = currentPage - 1;
-            setNewSearch(`?page=${page}`);
-            dispatch(setCurrentPageNumber(page));
+            setSearchParams(`?page=${page}`);
         }
     };
 
     const handleNext = () => {
-        if (currentPage < totalPages) {
+        if (currentPage < pages) {
             const page = currentPage + 1;
-            setNewSearch(`?page=${page}`);
-            dispatch(setCurrentPageNumber(page));
+            setSearchParams(`?page=${page}`);
         }
     };
 
@@ -38,9 +29,9 @@ export default function Pagination() {
                 Previous
             </button>
             <span>
-                Page {currentPage} of {totalPages}
+                Page {currentPage} of {pages}
             </span>
-            <button onClick={handleNext} disabled={currentPage === totalPages} className="pagination-btn">
+            <button onClick={handleNext} disabled={currentPage === pages} className="pagination-btn">
                 Next
             </button>
         </div>

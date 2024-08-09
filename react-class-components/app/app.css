@@ -54,3 +54,32 @@ body {
     justify-content: center;
     margin-top: 2rem;
 }
+
+.wrapper {
+    position: relative;
+    width: 1400px;
+    min-height: 80svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4rem;
+    padding: 7rem 2rem 3rem;
+}
+
+.wrapper > button {
+    position: absolute;
+    top: 2rem;
+    padding: 4px 8px;
+    font-size: 1.2rem;
+}
+
+.toggle-theme-btn {
+    position: absolute;
+    top: 0;
+    right: 2rem;
+    background-color: var(--reserveBg);
+}
+
+.wrapper.dark-theme > .toggle-theme-btn {
+    background-color: var(--background-darkTheme);
+}

@@ -1,49 +1,24 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import DetailPage from '../pages/detailPage/detailPage';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { MemoryRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
-import { apiSlice } from '../utils/apiSlice';
-import currentPageReducer from '../utils/currentPageSlice';
-
-let store = configureStore({
-    reducer: {
-        [apiSlice.reducerPath]: apiSlice.reducer,
-        currentPage: currentPageReducer,
-    },
-
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
-});
-
-beforeEach(() => {
-    store = configureStore({
-        reducer: {
-            [apiSlice.reducerPath]: apiSlice.reducer,
-            currentPage: currentPageReducer,
-        },
-
-        middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiSlice.middleware),
-    });
-});
-
-vi.mock('react-router-dom', async (importOriginal) => {
-    const actual = await importOriginal<typeof import('react-router-dom')>();
-    return {
-        ...actual,
-        useParams: () => ({ name: 'Luke Skywalker' }),
-    };
-});
+import { describe, it, expect } from 'vitest';
+import DetailPage from '~/routes/details.$name';
+import { json } from '@remix-run/node';
+import { createRemixStub } from '@remix-run/testing';
+import { mockResultsLuke } from './mockData';
 
 describe('DetailPage Component', () => {
     it('should render detail page with correct character information', async () => {
-        render(
-            <Provider store={store}>
-                <MemoryRouter>
-                    <DetailPage />
-                </MemoryRouter>
-            </Provider>
-        );
+        const character = mockResultsLuke;
+        const App = createRemixStub([
+            {
+                path: '/details',
+                Component: DetailPage,
+                loader() {
+                    return json({ character });
+                },
+            },
+        ]);
+
+        await render(<App initialEntries={['/details']} />);
 
         await waitFor(() => {
             const characterName = screen.getByRole('heading', { name: /Luke Skywalker/i });
@@ -53,33 +28,27 @@ describe('DetailPage Component', () => {
                 'Luke Skywalker is 172 cm tall, weighs 77 kg, has blond hair, fair skin, and blue eyes.';
             const description = screen.getByText(descriptionText);
             expect(description).toBeInTheDocument();
+            const closeBtn = screen.getByRole('button');
+            expect(closeBtn).toBeInTheDocument();
         });
     });
-    it('loading indicator is displayed while fetching data', async () => {
-        const { container } = render(
-            <Provider store={store}>
-                <MemoryRouter>
-                    <DetailPage />
-                </MemoryRouter>
-            </Provider>
-        );
-        const loader = container.querySelector('.loader-wrapper');
-        expect(loader).toBeInTheDocument();
+
+    it('clicking the close button hides the component', async () => {
+        const character = mockResultsLuke;
+        const App = createRemixStub([
+            {
+                path: '/details',
+                Component: DetailPage,
+                loader() {
+                    return json({ character });
+                },
+            },
+        ]);
+        await render(<App initialEntries={['/details']} />);
         await waitFor(() => {
-            const loaderAfterLoad = container.querySelector('.loader-wrapper');
-            expect(loaderAfterLoad).not.toBeInTheDocument();
+            const closeBtn = screen.getByRole('button');
+            fireEvent.click(closeBtn);
+            expect(screen.queryByText(/Luke Skywalker/i)).not.toBeInTheDocument();
         });
-    });
-    it('clicking the close button hides the component', () => {
-        render(
-            <Provider store={store}>
-                <MemoryRouter>
-                    <DetailPage />
-                </MemoryRouter>
-            </Provider>
-        );
-        const closeBtn = screen.getByRole('button');
-        fireEvent.click(closeBtn);
-        expect(screen.queryByText(/Luke Skywalker/i)).not.toBeInTheDocument();
     });
 });

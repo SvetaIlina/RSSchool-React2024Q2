@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
-import ErrorImitationBtn from '../../components/errorBoundary/errorImitationButton/errorImitationButton';
-import ResultsSection from '../../components/resultSection/resultSection';
-import SearchSection from '../../components/searchSection/searchSection';
-import '../pages.css';
-import { Outlet, useLocation } from 'react-router-dom';
-import Pagination from '../../components/pagination/pagination';
-import Flyout from '../../components/flyout/flyout';
+import ErrorImitationBtn from '../errorBoundary/errorImitationButton/errorImitationButton';
+import ResultsSection from '../resultSection/resultSection';
+import SearchSection from '../searchSection/searchSection';
+import Pagination from '../pagination/pagination';
+import Flyout from '../flyout/flyout';
 import useTheme from '../../hooks/useTheme';
-import { useSelector } from 'react-redux';
-import { getTotalPage } from '../../utils/currentPageSlice';
+import { SwapiPeopleResponse } from '../../types/type';
+import { Outlet, useLocation } from '@remix-run/react';
 
-export default function MainPage() {
+interface MainPageProps {
+    searchResult: SwapiPeopleResponse;
+    totalPages: number;
+}
+
+export default function MainPage({ searchResult, totalPages }: MainPageProps) {
     const [errorCounter, setErrorCounter] = useState(0);
-    const totalPages = useSelector(getTotalPage);
     const { isDark, toggleTheme } = useTheme();
     const location = useLocation();
 
@@ -35,7 +37,8 @@ export default function MainPage() {
             <SearchSection />
 
             <div className="result-section">
-                <ResultsSection />
+                <ResultsSection results={searchResult} />
+
                 {location.pathname.startsWith('/details') && (
                     <div className="right-section">
                         <Outlet />
@@ -43,7 +46,7 @@ export default function MainPage() {
                 )}
             </div>
 
-            {totalPages > 1 && <Pagination />}
+            {totalPages > 1 && <Pagination pages={totalPages} />}
             <Flyout />
             <ErrorImitationBtn onclick={simulateError} />
             <button className="toggle-theme-btn" onClick={toggleTheme}>

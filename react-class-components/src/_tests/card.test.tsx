@@ -2,27 +2,25 @@
 /// <reference types="vitest" />
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach } from 'vitest';
-import { mockNavigate, mockResults } from './mockData';
+import { describe, it, expect } from 'vitest';
+import { mockResults, mockResultsLuke } from './mockData';
 import Card from '../components/resultSection/card/card';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from '../utils/store';
-import DetailPage from '../pages/detailPage/detailPage';
-import { server } from '../setupTests';
+import { createRemixStub } from '@remix-run/testing';
+import DetailPage from '~/routes/details.$name';
+import { json } from '@remix-run/node';
+import { server } from 'src/setupTests';
 
-const character = mockResults.results[0];
+const luke = mockResults.results[0];
 
 describe('Card Component', () => {
-    beforeEach(() => {
-        mockNavigate.mockClear();
-    });
-
     it('renders the relevant card data', () => {
         render(
             <Provider store={store}>
                 <MemoryRouter>
-                    <Card character={character} />
+                    <Card character={luke} />
                 </MemoryRouter>
             </Provider>
         );
@@ -33,23 +31,30 @@ describe('Card Component', () => {
         render(
             <Provider store={store}>
                 <MemoryRouter>
-                    <Card character={character} />
+                    <Card character={luke} />
                 </MemoryRouter>
             </Provider>
         );
-        const cardBtn = screen.getByText('Show Details');
-        fireEvent.click(cardBtn);
-        expect(mockNavigate).toHaveBeenCalledWith(`details/${character.name}`, { replace: true });
+        const link = screen.getByText('Show Details');
+        expect(link).toHaveAttribute('href', '/details/Luke Skywalker');
     });
     it('clicking triggers an additional API call to fetch detailed information', async () => {
-        render(
+        const character = mockResultsLuke;
+        const App = createRemixStub([
+            {
+                path: '/details',
+                Component: DetailPage,
+                loader() {
+                    return json({ character });
+                },
+            },
+        ]);
+        await render(
             <Provider store={store}>
-                <MemoryRouter initialEntries={['/']}>
-                    <Routes>
-                        <Route path="/" element={<Card character={character} />} />
-                        <Route path="details/:name" element={<DetailPage />} />
-                    </Routes>
+                <MemoryRouter>
+                    <Card character={luke} />
                 </MemoryRouter>
+                <App initialEntries={['/details']} />
             </Provider>
         );
         const cardBtn = screen.getByText('Show Details');

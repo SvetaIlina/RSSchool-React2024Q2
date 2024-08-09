@@ -1,0 +1,23 @@
+.error-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: 2rem;
+    margin: 5rem auto;
+    width: 50svw;
+}
+
+.errorMsg {
+    font-size: 3rem;
+}
+
+.backLink {
+    color: var(--accent);
+    font-size: 2rem;
+    transition: all 0.3s;
+}
+
+.backLink:hover {
+    color: var(--text);
+}
