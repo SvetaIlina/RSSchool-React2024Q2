@@ -1,0 +1,22 @@
+.form-field,
+.form-radio-group,
+.form-radio-option {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.form-radio-option {
+    gap: 0.2rem;
+}
+
+.form-field {
+    width: 100%;
+    align-items: baseline;
+}
+.radio-field {
+    align-items: center;
+}
+
+.form-input {
+    flex-grow: 1;
+}
