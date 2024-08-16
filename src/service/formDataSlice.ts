@@ -1,15 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
-
-export type TFormData = {
-    name: string;
-    age: string;
-    email: string;
-    gender: string;
-    acceptTC: boolean;
-    country: string;
-    file: string | ArrayBuffer | null;
-};
+import { TFormData } from '../types/types';
 
 const initialState: TFormData[] = [];
 

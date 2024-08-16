@@ -10,6 +10,7 @@
 }
 
 .form-field {
+    position: relative;
     width: 100%;
     align-items: baseline;
 }
@@ -19,4 +20,26 @@
 
 .form-input {
     flex-grow: 1;
+}
+
+.weak::before,
+.medium::before,
+.strong::before {
+    position: absolute;
+    font-size: 1.2rem;
+    bottom: -70%;
+    left: 40%;
+}
+
+.weak::before {
+    content: 'Your password is weak';
+    color: red;
+}
+.medium::before {
+    content: 'Your password is medium';
+    color: #c2c20c;
+}
+.strong::before {
+    content: 'Your password is strong';
+    color: green;
 }

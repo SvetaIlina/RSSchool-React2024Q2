@@ -1,7 +1,12 @@
-import { useRef } from 'react';
-import MyForm from './form';
-import { TFormData } from '../../service/formDataSlice';
-import getBase64 from '../../utils/utils';
+import { FormEvent, useRef, useState } from 'react';
+import { addFormData } from '../../service/formDataSlice';
+import getBase64, { getPasswordStrengthLabel, handlePasswordChange } from '../../utils/utils';
+import FormField from '../formFields/uncontrolledComponents/input';
+import AutocompleteControl from '../formFields/uncontrolledComponents/autocomplete';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { TFormData } from '../../types/types';
+import './form.css';
 
 export default function UncontrolledForm() {
     const nameRef = useRef<HTMLInputElement | null>(null);
@@ -13,9 +18,13 @@ export default function UncontrolledForm() {
     const termsRef = useRef<HTMLInputElement | null>(null);
     const uploadRef = useRef<HTMLInputElement | null>(null);
     const autoCompliteRef = useRef<HTMLInputElement | null>(null);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [passwordStrength, setPasswordStrength] = useState(0);
 
-    const handleSubmit = async () => {
-        const genderRadios = genderRef?.current?.parentNode?.querySelectorAll('input[name="gender"]');
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const genderRadios = genderRef.current?.parentNode?.querySelectorAll('input[name="gender"]');
         let selectedGender = '';
 
         if (genderRadios) {
@@ -28,36 +37,72 @@ export default function UncontrolledForm() {
             });
         }
 
-        const uploadFile = uploadRef?.current?.files?.[0];
+        const uploadFile = uploadRef.current?.files?.[0];
 
         const data: TFormData = {
-            name: nameRef?.current?.value || '',
-            age: ageRef?.current?.value || '',
-            email: emailRef?.current?.value || '',
+            name: nameRef.current?.value || '',
+            age: ageRef.current?.value || '',
+            email: emailRef.current?.value || '',
             gender: selectedGender,
-            acceptTC: termsRef?.current?.checked || false,
-            country: autoCompliteRef?.current?.value || '',
+            acceptTC: termsRef.current?.checked || false,
+            country: autoCompliteRef.current?.value || '',
             file: uploadFile ? await getBase64(uploadFile) : '',
+            password: passwordRef.current?.value || '',
+            confirm: confirmPasswordRef.current?.value || '',
         };
+        console.log(data);
 
-        return data;
+        dispatch(addFormData(data));
+        navigate('/');
     };
 
     return (
         <>
-            <h1 className="form-title">Uncontrolled Component</h1>
-            <MyForm
-                nameRef={nameRef}
-                ageRef={ageRef}
-                emailRef={emailRef}
-                passwordRef={passwordRef}
-                confirmPasswordRef={confirmPasswordRef}
-                genderRef={genderRef}
-                termsRef={termsRef}
-                uploadRef={uploadRef}
-                autoCompliteRef={autoCompliteRef}
-                handleSubmit={handleSubmit}
-            />
+            <h1 className="form-title">Uncontrolled Form Component</h1>
+            <form className="form" onSubmit={handleSubmit}>
+                <FormField inputRef={nameRef} label="Name" id="name" type={'text'} placeholder={'Enter your name'} />
+                <FormField inputRef={ageRef} label="Age" id="age" type={'number'} placeholder={'Enter your age'} />
+                <FormField
+                    inputRef={emailRef}
+                    label="Email"
+                    id="email"
+                    type={'email'}
+                    placeholder={'Enter your email'}
+                />
+                <FormField
+                    inputRef={passwordRef}
+                    label="Password"
+                    id="password"
+                    type={'password'}
+                    placeholder={'Enter your password'}
+                    onchange={(e) => handlePasswordChange(e, setPasswordStrength)}
+                    classes={[getPasswordStrengthLabel(passwordStrength)]}
+                />
+
+                <FormField
+                    inputRef={confirmPasswordRef}
+                    label="Confirm password"
+                    id="confirm"
+                    type={'password'}
+                    placeholder={'Confirm password'}
+                />
+                <FormField
+                    inputRef={genderRef}
+                    id="gender"
+                    type={'radio'}
+                    radioOptions={[
+                        { value: 'male', text: 'Male', selected: true },
+                        { value: 'female', text: 'Female' },
+                        { value: 'other', text: 'Other' },
+                    ]}
+                />
+                <FormField inputRef={termsRef} label="I accept the Terms and Conditions" id="terms" type={'checkbox'} />
+                <FormField inputRef={uploadRef} label="Upload picture" id="upload" type={'file'} />
+                <AutocompleteControl inputRef={autoCompliteRef} />
+                <button className="submit-btn" type="submit">
+                    Submit
+                </button>
+            </form>
         </>
     );
 }

@@ -1,37 +1,36 @@
-import './input.css';
+import { FieldValues } from 'react-hook-form';
+import { FormInputPropsRHF } from '../../../types/types';
+import '../input.css';
 
-type Option = {
-    value: string;
-    text: string;
-    selected?: boolean | undefined;
-};
-
-interface FormInputProps {
-    label?: string;
-    id?: string;
-    type?: string;
-    placeholder?: string;
-    radioOptions?: Option[];
-    inputRef?: React.MutableRefObject<HTMLInputElement | null>;
-}
-
-export default function FormField({ label, id, type, placeholder, radioOptions, inputRef }: FormInputProps) {
+export default function FormFieldRHF<T extends FieldValues>({
+    label,
+    id,
+    type,
+    placeholder,
+    onchange,
+    classes,
+    radioOptions,
+    name,
+    register,
+    errors,
+}: FormInputPropsRHF<T>) {
+    const extraClasses = classes?.reduce((result, current) => result + ' ' + current, '') || '';
     const options = radioOptions?.map((option) => {
         return (
             <div key={option.value} className="form-radio-option">
                 <input
                     type="radio"
                     id={`${id}-${option.value}`}
-                    name={id}
                     defaultChecked={option.selected}
                     value={option.value}
+                    {...register(name)}
                 />
                 <label htmlFor={`${id}-${option.value}`}>{option.text}</label>
             </div>
         );
     });
     return (
-        <div className={`${type === 'radio' ? 'radio-field' : ''} form-field`}>
+        <div className={`${type === 'radio' ? 'radio-field' : ''} form-field ${extraClasses}`}>
             {label && (
                 <label className="form-label" htmlFor={id}>
                     {label}
@@ -39,26 +38,25 @@ export default function FormField({ label, id, type, placeholder, radioOptions, 
             )}
             {type !== 'radio' && (
                 <input
-                    ref={inputRef}
+                    {...register(name, {
+                        ...(onchange ? { onChange: (e) => onchange(e) } : {}),
+                    })}
                     type={type}
                     className="form-input"
                     placeholder={placeholder}
                     spellCheck="false"
                     id={id}
-                    name={id}
                 />
             )}
 
             {type === 'radio' && (
                 <>
                     <legend>Check your gender</legend>
-                    <div className="form-radio-group" ref={inputRef}>
-                        {options}
-                    </div>
+                    <div className="form-radio-group">{options}</div>
                 </>
             )}
             {type === 'password' && <div className="password-strength"></div>}
-            <span className="error-message"> </span>
+            <span className="error-message">{!errors ? '' : !errors.ref ? '' : errors.message}</span>
         </div>
     );
 }
