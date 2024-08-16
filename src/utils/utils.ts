@@ -52,3 +52,12 @@ export const handlePasswordChange = (
     const strength = calculatePasswordStrength(password);
     setFunction(strength);
 };
+
+export const handleConfirmChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    password: string | undefined,
+    setFunction: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+    const confirmedValue = e.target.value;
+    setFunction(password === confirmedValue);
+};

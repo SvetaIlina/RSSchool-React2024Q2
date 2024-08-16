@@ -4,20 +4,25 @@ import { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import '../autocmplete.css';
 import { FieldValues, UseFormRegister, FieldError, UseFormSetValue, Path, PathValue } from 'react-hook-form';
 import { isNotNull } from '../../../utils/utils';
+import { TErrors } from '../../../types/types';
 
 interface AutocompleteControlProps<T extends FieldValues> {
+    id: string;
     name?: Path<T>;
     register?: UseFormRegister<T>;
     errors?: FieldError;
     setValue?: UseFormSetValue<T>;
     inputRef?: React.MutableRefObject<HTMLInputElement | null>;
+    yupErrors?: TErrors;
 }
 
 export default function AutocompleteControl<T extends FieldValues>({
     inputRef,
     name,
+    id,
     register,
     errors,
+    yupErrors,
     setValue,
 }: AutocompleteControlProps<T>) {
     const countries: string[] = useSelector(getSelectCountries);
@@ -28,6 +33,8 @@ export default function AutocompleteControl<T extends FieldValues>({
     const localRef = inputRef ? inputRef : countryRef;
     let ref: React.Ref<HTMLInputElement | null> = useRef(null);
     let rest: Partial<ReturnType<UseFormRegister<T>>> = {};
+
+    const currentErrors = yupErrors ? yupErrors[id] : '';
 
     if (register && name) {
         const registered = register(name);
@@ -75,13 +82,13 @@ export default function AutocompleteControl<T extends FieldValues>({
 
     return (
         <div className="form-field autocomplete" ref={containerRef}>
-            <label className="form-label" htmlFor="country">
+            <label className="form-label" htmlFor={id}>
                 Select Country
             </label>
             <input
                 {...(rest ? rest : {})}
                 ref={localRef}
-                id="country"
+                id={id}
                 type="text"
                 className="form-input"
                 onChange={handleChange}
@@ -97,7 +104,10 @@ export default function AutocompleteControl<T extends FieldValues>({
                     ))}
                 </ul>
             )}
-            <span className="error-message">{!errors ? '' : !errors.ref ? '' : errors.message}</span>
+            {/* <span className="error-message">{!errors ? '' : !errors.ref ? '' : errors.message}</span> */}
+            <span className="message-wrapper">
+                <p className="error-message">{currentErrors}</p>
+            </span>
         </div>
     );
 }

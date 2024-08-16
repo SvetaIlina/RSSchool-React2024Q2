@@ -5,8 +5,10 @@ import FormField from '../formFields/uncontrolledComponents/input';
 import AutocompleteControl from '../formFields/uncontrolledComponents/autocomplete';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { TFormData } from '../../types/types';
+import { TErrors, TFormData, UncontrolledFormData } from '../../types/types';
 import './form.css';
+import { schema } from '../../utils/yupShema';
+import * as Yup from 'yup';
 
 export default function UncontrolledForm() {
     const nameRef = useRef<HTMLInputElement | null>(null);
@@ -21,6 +23,7 @@ export default function UncontrolledForm() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [passwordStrength, setPasswordStrength] = useState(0);
+    const [errors, setErrors] = useState<TErrors>({});
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -37,37 +40,70 @@ export default function UncontrolledForm() {
             });
         }
 
-        const uploadFile = uploadRef.current?.files?.[0];
-
-        const data: TFormData = {
+        const data: UncontrolledFormData = {
             name: nameRef.current?.value || '',
             age: ageRef.current?.value || '',
             email: emailRef.current?.value || '',
             gender: selectedGender,
             acceptTC: termsRef.current?.checked || false,
             country: autoCompliteRef.current?.value || '',
-            file: uploadFile ? await getBase64(uploadFile) : '',
+            file: uploadRef.current?.files?.[0],
             password: passwordRef.current?.value || '',
             confirm: confirmPasswordRef.current?.value || '',
         };
-        console.log(data);
-
-        dispatch(addFormData(data));
-        navigate('/');
+        try {
+            await schema.validate(data, { abortEarly: false });
+            const convertedFile = data.file ? await getBase64(data.file) : '';
+            const formData: TFormData = {
+                ...data,
+                file: convertedFile,
+            };
+            dispatch(addFormData(formData));
+            navigate('/');
+        } catch (error) {
+            if (error instanceof Yup.ValidationError) {
+                const newErrors: TErrors = {};
+                error.inner.forEach((err) => {
+                    if (err.path) {
+                        if (!Object.keys(newErrors).includes(err.path)) {
+                            newErrors[err.path] = [];
+                        }
+                        newErrors[err.path].push(err.message);
+                    }
+                });
+                setErrors(newErrors);
+                console.log(newErrors);
+            }
+        }
     };
 
     return (
         <>
             <h1 className="form-title">Uncontrolled Form Component</h1>
             <form className="form" onSubmit={handleSubmit}>
-                <FormField inputRef={nameRef} label="Name" id="name" type={'text'} placeholder={'Enter your name'} />
-                <FormField inputRef={ageRef} label="Age" id="age" type={'number'} placeholder={'Enter your age'} />
+                <FormField
+                    inputRef={nameRef}
+                    label="Name"
+                    id="name"
+                    type={'text'}
+                    placeholder={'Enter your name'}
+                    yupErrors={errors}
+                />
+                <FormField
+                    inputRef={ageRef}
+                    label="Age"
+                    id="age"
+                    type={'text'}
+                    placeholder={'Enter your age'}
+                    yupErrors={errors}
+                />
                 <FormField
                     inputRef={emailRef}
                     label="Email"
                     id="email"
-                    type={'email'}
+                    type={'text'}
                     placeholder={'Enter your email'}
+                    yupErrors={errors}
                 />
                 <FormField
                     inputRef={passwordRef}
@@ -77,6 +113,7 @@ export default function UncontrolledForm() {
                     placeholder={'Enter your password'}
                     onchange={(e) => handlePasswordChange(e, setPasswordStrength)}
                     classes={[getPasswordStrengthLabel(passwordStrength)]}
+                    yupErrors={errors}
                 />
 
                 <FormField
@@ -85,6 +122,7 @@ export default function UncontrolledForm() {
                     id="confirm"
                     type={'password'}
                     placeholder={'Confirm password'}
+                    yupErrors={errors}
                 />
                 <FormField
                     inputRef={genderRef}
@@ -95,10 +133,17 @@ export default function UncontrolledForm() {
                         { value: 'female', text: 'Female' },
                         { value: 'other', text: 'Other' },
                     ]}
+                    yupErrors={errors}
                 />
-                <FormField inputRef={termsRef} label="I accept the Terms and Conditions" id="terms" type={'checkbox'} />
-                <FormField inputRef={uploadRef} label="Upload picture" id="upload" type={'file'} />
-                <AutocompleteControl inputRef={autoCompliteRef} />
+                <FormField
+                    inputRef={termsRef}
+                    label="I accept the Terms and Conditions"
+                    id="acceptTC"
+                    type={'checkbox'}
+                    yupErrors={errors}
+                />
+                <FormField inputRef={uploadRef} label="Upload picture" id="file" type={'file'} yupErrors={errors} />
+                <AutocompleteControl id="country" inputRef={autoCompliteRef} yupErrors={errors} />
                 <button className="submit-btn" type="submit">
                     Submit
                 </button>

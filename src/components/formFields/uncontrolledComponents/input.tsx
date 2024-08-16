@@ -10,8 +10,18 @@ export default function FormField({
     classes,
     inputRef,
     onchange,
+    yupErrors,
 }: FormInputPropsRef) {
     const extraClasses = classes?.reduce((result, current) => result + ' ' + current, '') || '';
+    const inputsErrors = yupErrors[id] || [];
+    const errorsMessages = inputsErrors.map((error, index) => {
+        return (
+            <p key={index} className="error-message">
+                {error}
+            </p>
+        );
+    });
+
     const options = radioOptions?.map((option) => {
         return (
             <div key={option.value} className="form-radio-option">
@@ -27,33 +37,35 @@ export default function FormField({
         );
     });
     return (
-        <div className={`${type === 'radio' ? 'radio-field' : ''} form-field ${extraClasses}`}>
-            {label && (
-                <label className="form-label" htmlFor={id}>
-                    {label}
-                </label>
-            )}
-            {type !== 'radio' && (
-                <input
-                    ref={inputRef}
-                    type={type}
-                    className="form-input"
-                    placeholder={placeholder}
-                    spellCheck="false"
-                    id={id}
-                    onChange={onchange ? onchange : undefined}
-                />
-            )}
+        <div className="form-field">
+            <div className={`${type === 'radio' ? 'radio-field' : ''} input-wrapper ${extraClasses}`}>
+                {label && (
+                    <label className="form-label" htmlFor={id}>
+                        {label}
+                    </label>
+                )}
+                {type !== 'radio' && (
+                    <input
+                        ref={inputRef}
+                        type={type}
+                        className="form-input"
+                        placeholder={placeholder}
+                        spellCheck="false"
+                        id={id}
+                        onChange={onchange ? onchange : undefined}
+                    />
+                )}
 
-            {type === 'radio' && (
-                <>
-                    <legend>Check your gender</legend>
-                    <div className="form-radio-group" ref={inputRef}>
-                        {options}
-                    </div>
-                </>
-            )}
-            <span className="error-message"> </span>
+                {type === 'radio' && (
+                    <>
+                        <legend>Check your gender</legend>
+                        <div className="form-radio-group" ref={inputRef}>
+                            {options}
+                        </div>
+                    </>
+                )}
+            </div>
+            <span className="message-wrapper">{inputsErrors.length ? errorsMessages : null}</span>
         </div>
     );
 }

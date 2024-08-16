@@ -1,17 +1,23 @@
 .form-field,
 .form-radio-group,
-.form-radio-option {
+.form-radio-option,
+.input-wrapper {
     display: flex;
     gap: 0.8rem;
 }
 
-.form-radio-option {
+.form-radio-option,
+.form-field {
     gap: 0.2rem;
 }
 
 .form-field {
-    position: relative;
+    flex-direction: column;
     width: 100%;
+}
+
+.input-wrapper {
+    position: relative;
     align-items: baseline;
 }
 .radio-field {
@@ -24,11 +30,12 @@
 
 .weak::before,
 .medium::before,
-.strong::before {
+.strong::before,
+.not-matches::before {
     position: absolute;
     font-size: 1.2rem;
-    bottom: -70%;
-    left: 40%;
+    bottom: 10%;
+    right: 1%;
 }
 
 .weak::before {
@@ -42,4 +49,18 @@
 .strong::before {
     content: 'Your password is strong';
     color: green;
+}
+
+.not-matches::before {
+    content: 'Your password does not match';
+    color: red;
+}
+
+.message-wrapper {
+    min-height: 4rem;
+    font-size: 1.2rem;
+}
+
+.error-message {
+    text-align: center;
 }

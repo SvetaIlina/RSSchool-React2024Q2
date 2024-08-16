@@ -1,6 +1,8 @@
 import { ChangeEvent } from 'react';
 import { MultipleFieldErrors, Message, Ref, UseFormRegister, Path, FieldValues } from 'react-hook-form';
 
+export type TErrors = { [key: string]: string[] };
+
 type Option = {
     value: string;
     text: string;
@@ -28,13 +30,14 @@ export interface TFormData {
 
 export interface HookFormData extends Omit<TFormData, 'file'> {
     file: FileList;
-    password: string;
-    confirm: string;
+}
+export interface UncontrolledFormData extends Omit<TFormData, 'file'> {
+    file: File | undefined;
 }
 
 export interface FormInputProps {
     label?: string;
-    id?: string;
+    id: string;
     type?: string;
     placeholder?: string;
     radioOptions?: Option[];
@@ -44,6 +47,7 @@ export interface FormInputProps {
 
 export interface FormInputPropsRef extends FormInputProps {
     inputRef: React.MutableRefObject<HTMLInputElement | null>;
+    yupErrors: TErrors;
 }
 export interface FormInputPropsRHF<T extends FieldValues> extends FormInputProps {
     name: Path<T>;

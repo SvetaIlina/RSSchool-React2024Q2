@@ -11,9 +11,9 @@
     background: white;
     max-height: 150px;
     overflow-y: auto;
-    top: 20px;
+    top: 40px;
     right: 0px;
-    width: 72%;
+    width: 100%;
 }
 
 .autocomplete-option {
