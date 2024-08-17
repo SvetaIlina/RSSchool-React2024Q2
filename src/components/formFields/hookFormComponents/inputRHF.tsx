@@ -30,33 +30,37 @@ export default function FormFieldRHF<T extends FieldValues>({
         );
     });
     return (
-        <div className={`${type === 'radio' ? 'radio-field' : ''} form-field ${extraClasses}`}>
-            {label && (
-                <label className="form-label" htmlFor={id}>
-                    {label}
-                </label>
-            )}
-            {type !== 'radio' && (
-                <input
-                    {...register(name, {
-                        ...(onchange ? { onChange: (e) => onchange(e) } : {}),
-                    })}
-                    type={type}
-                    className="form-input"
-                    placeholder={placeholder}
-                    spellCheck="false"
-                    id={id}
-                />
-            )}
+        <div className="form-field">
+            <div className={`${type === 'radio' ? 'radio-field' : ''} input-wrapper ${extraClasses}`}>
+                {label && (
+                    <label className="form-label" htmlFor={id}>
+                        {label}
+                    </label>
+                )}
+                {type !== 'radio' && (
+                    <input
+                        {...register(name, {
+                            ...(onchange ? { onChange: (e) => onchange(e) } : {}),
+                        })}
+                        type={type}
+                        className="form-input"
+                        placeholder={placeholder}
+                        spellCheck="false"
+                        id={id}
+                    />
+                )}
 
-            {type === 'radio' && (
-                <>
-                    <legend>Check your gender</legend>
-                    <div className="form-radio-group">{options}</div>
-                </>
-            )}
-            {type === 'password' && <div className="password-strength"></div>}
-            <span className="error-message">{!errors ? '' : !errors.ref ? '' : errors.message}</span>
+                {type === 'radio' && (
+                    <>
+                        <legend>Check your gender</legend>
+                        <div className="form-radio-group">{options}</div>
+                    </>
+                )}
+            </div>
+
+            <span className="message-wrapper">
+                <p className="error-message">{!errors ? '' : !errors.ref ? '' : errors.message}</p>
+            </span>
         </div>
     );
 }

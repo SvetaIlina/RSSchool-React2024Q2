@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { addFormData } from '../../service/formDataSlice';
 import { TFormData } from '../../types/types';
 import FormField from '../formFields/uncontrolledComponents/input';
-import AutocompleteControl from '../formFields/uncontrolledComponents/autocomplete';
+import AutocompleteControl from '../formFields/autocomplete';
 
 interface MyFormProps {
     nameRef?: React.MutableRefObject<HTMLInputElement | null>;

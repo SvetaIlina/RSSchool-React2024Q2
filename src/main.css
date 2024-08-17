@@ -22,7 +22,7 @@ ul {
 
 a {
     text-decoration: none;
-    text-transform: uppercase;
+    color: blueviolet;
 }
 
 button {
@@ -36,6 +36,17 @@ button {
     height: 100%;
 }
 
-.form-title {
-    margin-bottom: 1rem;
+.nav-bar {
+    width: 50svw;
+    display: flex;
+    justify-content: space-between;
+    font-size: 2rem;
+}
+
+.nav-link {
+    transition: all 0.5s;
+}
+
+.nav-link:hover {
+    text-decoration: underline;
 }
