@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
-import { getSelectCountries } from '../../../service/countrySlice';
+import { getSelectCountries } from '../../service/countrySlice';
 import { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import '../autocmplete.css';
+import './autocmplete.css';
 import { FieldValues, UseFormRegister, FieldError, UseFormSetValue, Path, PathValue } from 'react-hook-form';
-import { isNotNull } from '../../../utils/utils';
-import { TErrors } from '../../../types/types';
+import { isNotNull } from '../../utils/utils';
+import { TErrors } from '../../types/types';
 
 interface AutocompleteControlProps<T extends FieldValues> {
     id: string;
@@ -34,7 +34,7 @@ export default function AutocompleteControl<T extends FieldValues>({
     let ref: React.Ref<HTMLInputElement | null> = useRef(null);
     let rest: Partial<ReturnType<UseFormRegister<T>>> = {};
 
-    const currentErrors = yupErrors ? yupErrors[id] : '';
+    const currentErrors = yupErrors ? yupErrors[id] : errors ? errors.message : '';
 
     if (register && name) {
         const registered = register(name);
@@ -104,7 +104,7 @@ export default function AutocompleteControl<T extends FieldValues>({
                     ))}
                 </ul>
             )}
-            {/* <span className="error-message">{!errors ? '' : !errors.ref ? '' : errors.message}</span> */}
+
             <span className="message-wrapper">
                 <p className="error-message">{currentErrors}</p>
             </span>

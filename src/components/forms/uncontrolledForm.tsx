@@ -2,7 +2,7 @@ import { FormEvent, useRef, useState } from 'react';
 import { addFormData } from '../../service/formDataSlice';
 import getBase64, { getPasswordStrengthLabel, handlePasswordChange } from '../../utils/utils';
 import FormField from '../formFields/uncontrolledComponents/input';
-import AutocompleteControl from '../formFields/uncontrolledComponents/autocomplete';
+import AutocompleteControl from '../formFields/autocomplete';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { TErrors, TFormData, UncontrolledFormData } from '../../types/types';
@@ -72,7 +72,6 @@ export default function UncontrolledForm() {
                     }
                 });
                 setErrors(newErrors);
-                console.log(newErrors);
             }
         }
     };
@@ -93,7 +92,7 @@ export default function UncontrolledForm() {
                     inputRef={ageRef}
                     label="Age"
                     id="age"
-                    type={'text'}
+                    type={'number'}
                     placeholder={'Enter your age'}
                     yupErrors={errors}
                 />
