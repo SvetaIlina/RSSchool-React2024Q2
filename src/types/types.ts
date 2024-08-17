@@ -20,18 +20,19 @@ export interface TFormData {
     name: string;
     age: string;
     email: string;
-    gender: string;
+    gender?: string;
     acceptTC: boolean;
     country: string;
-    file: string | ArrayBuffer | null;
+    file: string;
     password: string;
     confirm: string;
 }
 
-export interface HookFormData extends Omit<TFormData, 'file'> {
+export interface HookFormData extends Omit<TFormData, 'file' | 'age' | 'date'> {
     file: FileList;
+    age: number;
 }
-export interface UncontrolledFormData extends Omit<TFormData, 'file'> {
+export interface UncontrolledFormData extends Omit<TFormData, 'file' | 'date'> {
     file: File | undefined;
 }
 

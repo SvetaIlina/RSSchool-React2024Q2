@@ -6,27 +6,33 @@ import { useDispatch } from 'react-redux';
 import getBase64, { getPasswordStrengthLabel, handlePasswordChange } from '../../utils/utils';
 import { HookFormData, TFormData } from '../../types/types';
 import { useNavigate } from 'react-router-dom';
-import AutocompleteControlHookForm from '../formFields/hookFormComponents/autocompleteInputRHF';
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from '../../utils/yupShema';
+import AutocompleteControl from '../formFields/autocomplete';
 
 export default function HookFormComponent() {
     const {
         register,
         handleSubmit,
         setValue,
-        formState: { errors },
-    } = useForm<HookFormData>({ mode: 'all' });
+        formState: { errors, isValid },
+    } = useForm<HookFormData>({
+        resolver: yupResolver(schema),
+        mode: 'all',
+    });
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [passwordStrength, setPasswordStrength] = useState(0);
 
     const submit: SubmitHandler<HookFormData> = async (data: HookFormData) => {
         const convertedFile = data.file[0] ? await getBase64(data.file[0]) : '';
+        const ageToString = `${data.age}`;
         const formData: TFormData = {
             ...data,
             file: convertedFile,
+            age: ageToString,
         };
-        console.log(formData);
 
         dispatch(addFormData(formData));
         navigate('/');
@@ -58,7 +64,7 @@ export default function HookFormComponent() {
                 <FormFieldRHF
                     label="Email"
                     id="email"
-                    type={'email'}
+                    type={'text'}
                     placeholder={'Enter your email'}
                     register={register}
                     name="email"
@@ -112,13 +118,14 @@ export default function HookFormComponent() {
                     name="file"
                     errors={errors.file}
                 />
-                <AutocompleteControlHookForm
+                <AutocompleteControl
+                    id="country"
                     register={register}
                     name="country"
                     errors={errors.country}
                     setValue={setValue}
                 />
-                <button className="submit-btn" type="submit">
+                <button className="submit-btn" type="submit" disabled={!isValid}>
                     Submit
                 </button>
             </form>
