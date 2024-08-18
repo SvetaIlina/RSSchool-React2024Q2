@@ -75,7 +75,7 @@ export default function AutocompleteControl<T extends FieldValues>({
         } else if (countryRef?.current) {
             isNotNull(setValue);
             isNotNull(name);
-            setValue(name, country as PathValue<T, Path<T>>);
+            setValue(name, country as PathValue<T, Path<T>>, { shouldValidate: true });
         }
         setShowOptions(false);
     };
