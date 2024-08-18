@@ -25,8 +25,7 @@ export default function UncontrolledForm() {
     const [passwordStrength, setPasswordStrength] = useState(0);
     const [errors, setErrors] = useState<TErrors>({});
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const getSelectedGender = () => {
         const genderRadios = genderRef.current?.parentNode?.querySelectorAll('input[name="gender"]');
         let selectedGender = '';
 
@@ -40,11 +39,17 @@ export default function UncontrolledForm() {
             });
         }
 
+        return selectedGender;
+    };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
         const data: UncontrolledFormData = {
             name: nameRef.current?.value || '',
             age: ageRef.current?.value || '',
             email: emailRef.current?.value || '',
-            gender: selectedGender,
+            gender: getSelectedGender(),
             acceptTC: termsRef.current?.checked || false,
             country: autoCompliteRef.current?.value || '',
             file: uploadRef.current?.files?.[0],
