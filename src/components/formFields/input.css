@@ -19,6 +19,7 @@
 .input-wrapper {
     position: relative;
     align-items: baseline;
+    justify-content: start;
 }
 .radio-field {
     align-items: center;
@@ -49,11 +50,6 @@
 .strong::before {
     content: 'Your password is strong';
     color: green;
-}
-
-.not-matches::before {
-    content: 'Your password does not match';
-    color: red;
 }
 
 .message-wrapper {
