@@ -1,0 +1,63 @@
+.form-field,
+.form-radio-group,
+.form-radio-option,
+.input-wrapper {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.form-radio-option,
+.form-field {
+    gap: 0.2rem;
+}
+
+.form-field {
+    flex-direction: column;
+    width: 100%;
+}
+
+.input-wrapper {
+    position: relative;
+    align-items: baseline;
+    justify-content: start;
+}
+.radio-field {
+    align-items: center;
+}
+
+.form-input {
+    flex-grow: 1;
+}
+
+.weak::before,
+.medium::before,
+.strong::before,
+.not-matches::before {
+    position: absolute;
+    font-size: 1.2rem;
+    bottom: 10%;
+    right: 1%;
+}
+
+.weak::before {
+    content: 'Your password is weak';
+    color: red;
+}
+.medium::before {
+    content: 'Your password is medium';
+    color: #c2c20c;
+}
+.strong::before {
+    content: 'Your password is strong';
+    color: green;
+}
+
+.message-wrapper {
+    min-height: 4rem;
+    font-size: 1.2rem;
+}
+
+.error-message {
+    text-align: center;
+    color: rgb(226, 126, 126);
+}
